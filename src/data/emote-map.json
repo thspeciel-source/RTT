@@ -1,0 +1,53 @@
+{
+  "face": {
+    "neutral": { "color": "#d9a066", "label": "neutral" },
+    "smile": { "color": "#e8b96a", "label": "smile" },
+    "grin": { "color": "#f0c674", "label": "grin" },
+    "laugh": { "color": "#f5d67f", "label": "laugh" },
+    "smirk": { "color": "#c9a25e", "label": "smirk" },
+    "frown": { "color": "#b08252", "label": "frown" },
+    "scowl": { "color": "#9c6a45", "label": "scowl" },
+    "shock": { "color": "#e0d8c0", "label": "shock" },
+    "worry": { "color": "#c7b088", "label": "worry" },
+    "disgust": { "color": "#96a86a", "label": "disgust" },
+    "sad": { "color": "#8a97b0", "label": "sad" },
+    "sly": { "color": "#b98fc2", "label": "sly" },
+    "rage": { "color": "#c83030", "label": "rage" },
+    "blank": { "color": "#9a9a9a", "label": "blank" },
+    "nervous": { "color": "#d0c090", "label": "nervous" },
+    "pleading": { "color": "#e0a8a8", "label": "pleading" }
+  },
+  "arms": {
+    "relaxed": { "color": "#7a5230", "label": "relaxed" },
+    "crossed_arms": { "color": "#6b4728", "label": "crossed" },
+    "hand_on_hip": { "color": "#83592f", "label": "hip" },
+    "palms_up": { "color": "#8f6438", "label": "palms up" },
+    "pointing": { "color": "#a06f3d", "label": "pointing" },
+    "fist_raised": { "color": "#c83030", "label": "fist up" },
+    "fist_slam": { "color": "#c83030", "label": "fist slam" },
+    "hand_wave": { "color": "#96773f", "label": "wave" },
+    "hand_out": { "color": "#96773f", "label": "hand out" },
+    "scratching_head": { "color": "#7a5230", "label": "scratch" },
+    "rubbing_chin": { "color": "#7a5230", "label": "chin" },
+    "hands_up": { "color": "#e0d8c0", "label": "hands up" },
+    "tipping_hat": { "color": "#3b2716", "label": "hat tip" },
+    "reaching_pocket": { "color": "#3b2716", "label": "pocket" },
+    "counting_money": { "color": "#d4a040", "label": "$$$" }
+  },
+  "bubble": {
+    "none": null,
+    "exclamation": { "icon": "!", "color": "#e03030" },
+    "question": { "icon": "?", "color": "#f0d030" },
+    "double_question": { "icon": "??", "color": "#f0d030" },
+    "heart": { "icon": "♥", "color": "#e878a0" },
+    "broken_heart": { "icon": "♥", "color": "#888888" },
+    "anger_vein": { "icon": "✖", "color": "#e03030" },
+    "sweat_drop": { "icon": "•", "color": "#60a0e0" },
+    "money_eyes": { "icon": "$", "color": "#d4a040" },
+    "skull": { "icon": "☠", "color": "#e0d8c0" },
+    "lightbulb": { "icon": "✦", "color": "#f0e070" },
+    "zzz": { "icon": "z", "color": "#a0c0e0" },
+    "sparkle": { "icon": "✱", "color": "#ffd700" },
+    "ellipsis": { "icon": "…", "color": "#c8c8c8" }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "player": ["Rusty Pocket Watch"],
+  "npc": {
+    "valuable": "Deed to the Saloon",
+    "midTier": "Bottle of Aged Whiskey"
+  }
+}

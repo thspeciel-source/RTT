@@ -1,0 +1,11 @@
+{
+  "dusty_sal": {
+    "id": "dusty_sal",
+    "name": "Dusty Sal",
+    "personality": "a gruff but fair saloon owner who's seen too much and trusts no one quickly",
+    "backstory": "Sal has run the Last Chance Saloon for twenty years and buried two business partners who tried to cheat him. He respects boldness and honesty far more than flattery, and he can smell a con from across the room.",
+    "goal": "get the best possible deal without giving up the saloon deed for less than it's worth",
+    "initialMood": { "valence": 0.0, "arousal": 0.3 },
+    "inventory": ["Deed to the Saloon", "Bottle of Aged Whiskey"]
+  }
+}

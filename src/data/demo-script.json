@@ -1,0 +1,90 @@
+{
+  "turns": [
+    {
+      "npc_dialogue": "Well, well. Look who wandered into my saloon. State your business, stranger.",
+      "face": "neutral",
+      "arms": "relaxed",
+      "bubble": "none",
+      "body_anim": "idle",
+      "mood": { "valence": 0.0, "arousal": 0.3 },
+      "patience": 1.0,
+      "trade_state": "none",
+      "player_options": [
+        { "label": "Introduce", "strategy": "friendly", "text": "Just here to talk business, Sal. Nothing more." },
+        { "label": "Size him up", "strategy": "shrewd", "text": "I hear you've got something worth my while." },
+        { "label": "Get to it", "strategy": "aggressive", "text": "Cut the theatrics. Let's talk price." },
+        { "label": "Play dumb", "strategy": "deceptive", "text": "Oh, I was just passing through, really." }
+      ]
+    },
+    {
+      "npc_dialogue": "Heh. Bold for a stranger. Fine — I'm listening. What've you got to offer, exactly?",
+      "face": "smirk",
+      "arms": "hand_on_hip",
+      "bubble": "question",
+      "body_anim": "lean_forward",
+      "mood": { "valence": 0.15, "arousal": 0.35 },
+      "patience": 0.82,
+      "trade_state": "none",
+      "player_options": [
+        { "label": "Show watch", "strategy": "friendly", "text": "This pocket watch. Family heirloom, runs like new." },
+        { "label": "Lowball", "strategy": "shrewd", "text": "Depends what you're willing to give up first." },
+        { "label": "Demand", "strategy": "aggressive", "text": "The deed. That's what I'm here for." },
+        { "label": "Bluff", "strategy": "deceptive", "text": "Let's just say it's worth more than it looks." }
+      ]
+    },
+    {
+      "npc_dialogue": "A watch? That's what you're wasting my time with? I've seen better in a pawn shop bin.",
+      "face": "frown",
+      "arms": "crossed_arms",
+      "bubble": "sweat_drop",
+      "body_anim": "lean_back",
+      "mood": { "valence": -0.2, "arousal": 0.5 },
+      "patience": 0.52,
+      "trade_state": "none",
+      "player_options": [
+        { "label": "Reassure", "strategy": "friendly", "text": "It's worth more than it looks, I promise you that." },
+        { "label": "Sweeten", "strategy": "shrewd", "text": "I'll throw in something extra if the deed's on the table." },
+        { "label": "Push", "strategy": "aggressive", "text": "Take it or leave it, Sal. My patience runs thin too." },
+        { "label": "Stall", "strategy": "deceptive", "text": "There's more where that came from, trust me." }
+      ]
+    },
+    {
+      "npc_dialogue": "You've got about one more sentence before I show you the door. Make it count.",
+      "face": "scowl",
+      "arms": "fist_raised",
+      "bubble": "anger_vein",
+      "body_anim": "shake",
+      "mood": { "valence": -0.45, "arousal": 0.75 },
+      "patience": 0.22,
+      "trade_state": "offered",
+      "player_options": [
+        { "label": "Apologize", "strategy": "friendly", "text": "Fair enough. Let's find terms we can both live with." },
+        { "label": "Final offer", "strategy": "shrewd", "text": "Watch, plus a favor owed. That's my final word." },
+        { "label": "Snap back", "strategy": "aggressive", "text": "Watch your tone, old man. I'm not scared of you." },
+        { "label": "Charm", "strategy": "deceptive", "text": "Come on, Sal — you know you like me." }
+      ]
+    }
+  ],
+  "endingAccepted": {
+    "npc_dialogue": "...Alright. Alright! Deal. Don't make me regret this, stranger.",
+    "face": "smile",
+    "arms": "hand_out",
+    "bubble": "sparkle",
+    "body_anim": "bounce",
+    "mood": { "valence": 0.5, "arousal": 0.4 },
+    "patience": 0.5,
+    "trade_state": "accepted",
+    "player_options": []
+  },
+  "endingHostile": {
+    "npc_dialogue": "That's IT! Get OUT of my saloon before I throw you out myself!",
+    "face": "rage",
+    "arms": "fist_slam",
+    "bubble": "anger_vein",
+    "body_anim": "slam",
+    "mood": { "valence": -1.0, "arousal": 0.95 },
+    "patience": 0.0,
+    "trade_state": "hostile_end",
+    "player_options": []
+  }
+}
