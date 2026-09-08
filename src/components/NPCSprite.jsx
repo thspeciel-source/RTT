@@ -1,6 +1,6 @@
 import React from 'react';
 import emoteMap from '../data/emote-map.json';
-import { NPC_BODY, FACE_IMAGES, BUBBLE_IMAGES } from '../systems/sprite-assets.js';
+import { NPC_BODY, NPC_SHADOW, FACE_IMAGES, BUBBLE_IMAGES } from '../systems/sprite-assets.js';
 
 export default function NPCSprite({ face, bubble, bodyAnim, rageOverlay }) {
   const bubbleStyle = emoteMap.bubble[bubble];
@@ -10,6 +10,7 @@ export default function NPCSprite({ face, bubble, bodyAnim, rageOverlay }) {
   return (
     <div className="npc-sprite-wrap">
       <div className={`npc-sprite anim-${bodyAnim || 'idle'}`}>
+        <img className="npc-layer-img" src={NPC_SHADOW} alt="" />
         <img className="npc-layer-img" src={NPC_BODY} alt="" />
 
         {/* No art for this face key yet (or it's "neutral") -> body's own baked-in

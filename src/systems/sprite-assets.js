@@ -1,4 +1,5 @@
 import bodyDustySal from '../assets/sprites/body_dusty_sal.png';
+import shadowDustySal from '../assets/sprites/shadow_dusty_sal.png';
 import faceScowl from '../assets/sprites/face_scowl.png';
 import faceRage from '../assets/sprites/face_rage.png';
 import faceShock from '../assets/sprites/face_shock.png';
@@ -22,6 +23,11 @@ import bubbleEllipsis from '../assets/bubbles/bubble_ellipsis.png';
 // NPCSprite.jsx. Arms aren't separate layers yet; they're baked into
 // NPC_BODY until arm-pose art exists.
 export const NPC_BODY = bodyDustySal;
+// Ground shadow extracted out of the original generation (same pixels, same
+// coordinate space as NPC_BODY) so it renders as its own layer underneath
+// instead of being baked into the body — the baked-in version didn't line
+// up with the game's own ground-line rendering.
+export const NPC_SHADOW = shadowDustySal;
 export const PLAYER_BODY = playerBase;
 
 export const FACE_IMAGES = {
