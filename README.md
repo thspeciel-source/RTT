@@ -80,19 +80,30 @@ playable, zero cost, zero config. Every push to the branch auto-redeploys.
   `POST /api/llm-proxy` to the Anthropic Messages API using
   `claude-haiku-4-5-20251001`, keeping the API key server-side.
 
-## Placeholder art
+## Art status
 
-Per the prototype spec, the NPC and player are rendered as simple colored
-rectangles (body/head/arms/face), with face/arm/bubble colors driven by
-`src/data/emote-map.json`. Swap in real sprite PNGs later by replacing the
-CSS classes in `NPCSprite.jsx`/`PlayerSprite.jsx` with `<img>` layers — no
-game-logic changes required.
+Dusty Sal, the player, and a first pass of emotes now have real hand-authored
+pixel sprites (`src/assets/sprites/`, `src/assets/bubbles/`), generated at
+native low resolution and displayed with `image-rendering: pixelated` at a
+clean 5x/2x upscale. Coverage so far:
+
+- **Faces:** neutral, smile, scowl, rage, shock, nervous
+- **Arms:** relaxed, crossed_arms, hand_on_hip, fist_slam, hands_up, pointing
+- **Bubbles:** exclamation, question, anger_vein, heart, sparkle, ellipsis
+- **Player:** one static back-facing sprite
+
+Any `face`/`arms`/`bubble` key the LLM (or demo script) picks that isn't in
+that list — e.g. `grin`, `smirk`, `palms_up`, `money_eyes` — falls back to
+the original colored-rectangle placeholder (`src/data/emote-map.json`)
+automatically, so nothing breaks as coverage grows. `src/systems/sprite-assets.js`
+is the single place new PNGs get registered; drop in a new file, add one
+import + map entry, done.
 
 ## What's not implemented
 
-Real generated pixel art (Phase 6 of the build order) requires an external
-AI image generation + pixel-art conversion pipeline and hand-authored
-sprite sheets — out of scope for this prototype pass. Everything else in
-the blueprint (UI, sprite layering, LLM integration, pre-loading, patience
-system, crash-out/win sequences) is implemented and has been verified to
-run end-to-end in a browser.
+The remaining ~10 face expressions, ~9 arm poses, and ~8 bubbles from the
+full emote bank (Section 3.2 of the blueprint) still render as colored-box
+placeholders — extending art coverage is additive work, not a redesign.
+Everything else in the blueprint (UI, sprite layering, LLM integration,
+pre-loading, patience system, crash-out/win sequences) is implemented and
+verified end-to-end in a browser.

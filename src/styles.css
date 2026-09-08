@@ -225,8 +225,8 @@ html, body {
   position: absolute;
   left: 6%;
   bottom: 12%;
-  width: 90px;
-  height: 130px;
+  width: 100px;
+  height: 170px;
 }
 
 .player-sprite {
@@ -236,33 +236,21 @@ html, body {
   animation: idle 1.5s ease-in-out infinite;
 }
 
-.player-body {
+.player-layer-img {
   position: absolute;
-  bottom: 0;
-  left: 15%;
-  width: 70%;
-  height: 85%;
-  background: #4a3626;
-  border-radius: 6px 6px 2px 2px;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
-}
-
-.player-head {
-  position: absolute;
-  top: 0;
-  left: 30%;
-  width: 40%;
-  height: 30%;
-  background: #6b4c33;
-  border-radius: 50% 50% 40% 40%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .npc-sprite-wrap {
   position: absolute;
   right: 6%;
   bottom: 15%;
-  width: 110px;
-  height: 190px;
+  width: 120px;
+  height: 200px;
 }
 
 .npc-sprite {
@@ -272,28 +260,18 @@ html, body {
   transform-origin: bottom center;
 }
 
+.npc-layer-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
 .npc-layer {
   position: absolute;
   transition: background-color 300ms ease;
-}
-
-.npc-body {
-  bottom: 0;
-  left: 18%;
-  width: 64%;
-  height: 62%;
-  background: #7a5230;
-  border-radius: 8px 8px 3px 3px;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
-}
-
-.npc-head {
-  bottom: 56%;
-  left: 28%;
-  width: 44%;
-  height: 26%;
-  border-radius: 50%;
-  background: #c99a6b;
 }
 
 .npc-face {
@@ -302,15 +280,6 @@ html, body {
   width: 32%;
   height: 14%;
   border-radius: 4px;
-}
-
-.npc-hat {
-  bottom: 78%;
-  left: 22%;
-  width: 56%;
-  height: 12%;
-  background: var(--dark-brown);
-  border-radius: 3px 3px 0 0;
 }
 
 .npc-arm-left,
@@ -343,6 +312,18 @@ html, body {
   align-items: center;
   justify-content: center;
   font-size: 11px;
+  animation: bubbleFloat 1.6s ease-in-out infinite;
+}
+
+.npc-bubble-img {
+  position: absolute;
+  top: -18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
   animation: bubbleFloat 1.6s ease-in-out infinite;
 }
 
