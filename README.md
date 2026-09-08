@@ -26,6 +26,25 @@ LLM proxy (`http://localhost:3001`) together.
   reload the page — the app detects the key via `/api/health` and switches
   to live Haiku-driven dialogue automatically.
 
+## Deploy for free (playtest on your iPhone)
+
+The app is a static frontend + two tiny API routes, so it deploys as a
+single free project on [Vercel](https://vercel.com) — no separate backend
+host needed. `api/health.js` and `api/llm-proxy.js` are Vercel serverless
+functions that mirror `server/proxy.js` (used for local dev only).
+
+1. Go to **vercel.com** → sign in with GitHub → **Add New → Project**.
+2. Import `thspeciel-source/RTT` and select the `claude/project-execution-14pzsb` branch.
+3. Framework preset auto-detects as **Vite** — leave build settings default.
+4. *(Optional, for real LLM negotiation instead of demo mode)* under
+   **Environment Variables**, add `ANTHROPIC_API_KEY` with your key.
+5. Click **Deploy**. You'll get a URL like `run-this-town.vercel.app`.
+6. Open that URL in Safari on your iPhone, then **Share → Add to Home
+   Screen** for a full-screen, no-browser-chrome app icon.
+
+No API key set? It just runs in Demo Mode on the deployed URL too — fully
+playable, zero cost, zero config. Every push to the branch auto-redeploys.
+
 ## Scripts
 
 | Command | What it does |
