@@ -51,6 +51,9 @@ export default function BattleScene({
         {showChoices && (
           <ChoiceGrid options={options} disabled={choicesDisabled} onSelect={onSelectOption} />
         )}
+        <div className="footer-banner">
+          <span className="footer-banner-text shiny-text">RUN THIS TOWN</span>
+        </div>
       </div>
       <EndScreen outcome={endOutcome} summary={endSummary} onRestart={onRestart} />
     </div>
