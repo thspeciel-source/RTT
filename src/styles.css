@@ -290,18 +290,18 @@ html, body {
 .patience-bar-wrap {
   position: absolute;
   top: 0;
-  left: 12px;
-  right: 12px;
+  left: 8px;
+  right: 8px;
   padding-top: env(safe-area-inset-top, 0px);
-  padding-top: max(10px, env(safe-area-inset-top, 10px));
+  padding-top: max(16px, env(safe-area-inset-top, 16px));
   z-index: 10;
 }
 
 .patience-bar-track {
   position: relative;
-  height: 8px;
-  border-radius: 2px;
-  border: 1px solid var(--brass-dim);
+  height: 12px;
+  border-radius: 3px;
+  border: 2px solid var(--brass-dim);
   background: rgba(0, 0, 0, 0.5);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 220, 160, 0.08);
   overflow: hidden;
@@ -322,7 +322,36 @@ html, body {
   top: 0;
   right: 0;
   height: 100%;
+  overflow: hidden;
   transition: width 800ms cubic-bezier(0.16, 1, 0.3, 1), background-color 800ms ease;
+}
+
+/* Bubbling texture — a tiled dot pattern blended over the fill's own
+   dynamic background-color (mix-blend-mode, not a fixed color) so it
+   re-tints itself automatically as the fill shifts from amber to red. */
+.patience-bar-fill::before {
+  content: '';
+  position: absolute;
+  inset: -4px 0 0 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.65) 28%, transparent 32%);
+  background-size: 5px 5px;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  animation: bubbleRise 2.4s linear infinite;
+}
+
+@keyframes bubbleRise {
+  0% { background-position: 0 0; }
+  100% { background-position: -5px -10px; }
+}
+
+/* Glossy top highlight for a bit of 3D roundness */
+.patience-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 55%);
+  pointer-events: none;
 }
 
 .patience-bar-ticks {
