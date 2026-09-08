@@ -17,6 +17,19 @@ def crop_to_bbox(img, bbox, padding=1):
     return img.crop((x0, y0, x1, y1))
 
 
+def crop_fixed_box(img, box):
+    """
+    Crops to an exact, manually-specified pixel region (x0, y0, x1, y1) —
+    for extracting just the head or just the arms out of a full-body
+    generation, where every generation shares the same init image and
+    should place those features at roughly the same coordinates. Prefer
+    this over crop_to_bbox() when isolating ONE part of a larger image;
+    crop_to_bbox()/largest_component_bbox() would just grab the whole
+    body (the biggest connected shape), not the part you actually want.
+    """
+    return img.crop(box)
+
+
 def downscale_to_grid(img, target_w, target_h, fit="contain"):
     """
     Downscales using an area/box filter (averages neighborhoods rather than

@@ -23,8 +23,11 @@ Usage:
       --categories skin,hair,cloth_vest,leather \\
       --shading on --outline off
 
-Run with no source image processing needed, just to sanity-check the
-palette/tooling: --self-test (see README.md).
+  # extracting just the head out of a full-character generation:
+  python3 tools/pixel-art/process.py \\
+      --input assets/_incoming/face_angry/source.png \\
+      --asset-id face_angry --width 24 --height 40 \\
+      --categories skin,hair,ui --crop-box 38,10,90,70
 """
 import argparse
 import os
@@ -59,13 +62,19 @@ def next_version_path(asset_id, out_dir=GENERATED_DIR):
     return os.path.join(out_dir, f"{asset_id}_v{next_v:03d}.png"), next_v
 
 
-def run_pipeline(input_path, asset_id, width, height, categories=None, shading="off", outline="off", outline_category=None):
+def run_pipeline(input_path, asset_id, width, height, categories=None, shading="off", outline="off", outline_category=None, crop_box=None):
     img = Image.open(input_path).convert("RGBA")
 
     img = silhouette.binarize_alpha(img)
-    bbox = silhouette.largest_component_bbox(img)
-    if bbox:
-        img = resize.crop_to_bbox(img, bbox)
+    if crop_box:
+        # Extracting one region (head, arms) out of a full-character
+        # generation — use the exact box, not auto-detection (which would
+        # just find the whole character, the biggest connected shape).
+        img = resize.crop_fixed_box(img, crop_box)
+    else:
+        bbox = silhouette.largest_component_bbox(img)
+        if bbox:
+            img = resize.crop_to_bbox(img, bbox)
 
     img = resize.downscale_to_grid(img, width, height)
     img = silhouette.binarize_alpha(img)  # downscale can reintroduce soft edges
@@ -99,14 +108,16 @@ def main():
     ap.add_argument("--shading", choices=["on", "off"], default="off")
     ap.add_argument("--outline", choices=["on", "off"], default="off")
     ap.add_argument("--outline-category", default=None, help="Which palette category's outline color to use (defaults to first --categories entry)")
+    ap.add_argument("--crop-box", default=None, help="x0,y0,x1,y1 — extract this exact region instead of auto-detecting the subject. Use this when the input is a full-character generation and you only want the head or arms out of it.")
     args = ap.parse_args()
 
     categories = [c.strip() for c in args.categories.split(",") if c.strip()] or None
+    crop_box = tuple(int(v) for v in args.crop_box.split(",")) if args.crop_box else None
 
     out_path, version, pal, categories = run_pipeline(
         args.input, args.asset_id, args.width, args.height,
         categories=categories, shading=args.shading, outline=args.outline,
-        outline_category=args.outline_category
+        outline_category=args.outline_category, crop_box=crop_box
     )
 
     print(f"Wrote {out_path} (v{version:03d})")
