@@ -3,9 +3,6 @@ import StageArea from './StageArea.jsx';
 import DialogueBox from './DialogueBox.jsx';
 import ChoiceGrid from './ChoiceGrid.jsx';
 import EndScreen from './EndScreen.jsx';
-import { SUIT_IMAGES } from '../systems/sprite-assets.js';
-
-const SUIT_ORDER = ['friendly', 'shrewd', 'aggressive', 'deceptive'];
 
 export default function BattleScene({
   npcName,
@@ -54,11 +51,7 @@ export default function BattleScene({
         {showChoices && (
           <ChoiceGrid options={options} disabled={choicesDisabled} onSelect={onSelectOption} />
         )}
-        <div className="footer-banner">
-          {SUIT_ORDER.map((suit) => (
-            <img key={suit} className="footer-banner-icon" src={SUIT_IMAGES[suit]} alt="" />
-          ))}
-        </div>
+        <div className="footer-banner" />
       </div>
       <EndScreen outcome={endOutcome} summary={endSummary} onRestart={onRestart} />
     </div>
