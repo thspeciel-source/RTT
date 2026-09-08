@@ -115,6 +115,17 @@ html, body {
   font-family: 'Silkscreen', 'Courier New', monospace;
 }
 
+/* On an actual phone-sized viewport, .phone-frame already fills the real
+   (rounded-corner) screen edge to edge — the decorative desktop-mockup
+   bezel above just fights the device's own rounded corners there,
+   especially at the bottom. Drop it once there's no real desktop chrome
+   around the frame to justify pretending it's a phone mockup. */
+@media (max-width: 480px) {
+  .phone-frame {
+    box-shadow: none;
+  }
+}
+
 /* Thin western-style picture-frame border around the whole display */
 .phone-frame::after {
   content: '';
@@ -236,7 +247,9 @@ html, body {
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 1;
+  /* No z-index — DOM order alone keeps this behind PlayerSprite/NPCSprite
+     (which come later in StageArea's markup) without also climbing above
+     them the way an explicit positive z-index would. */
 }
 
 .wind-streak {
@@ -290,8 +303,8 @@ html, body {
 .patience-bar-wrap {
   position: absolute;
   top: 0;
-  left: 8px;
-  right: 8px;
+  left: 16px;
+  right: 16px;
   padding-top: env(safe-area-inset-top, 0px);
   padding-top: max(16px, env(safe-area-inset-top, 16px));
   z-index: 10;
@@ -615,16 +628,19 @@ html, body {
 .choice-button {
   position: relative;
   overflow: hidden;
+  background-color: var(--paper);
   background-image:
-    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
-    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
-  border: 2px solid var(--brass);
+    radial-gradient(ellipse at 20% 20%, rgba(120, 95, 55, 0.14), transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(120, 95, 55, 0.12), transparent 55%),
+    repeating-linear-gradient(90deg, var(--paper-shadow) 0px, var(--paper-shadow) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: normal, normal, soft-light;
+  border: 2px solid var(--frame-brown);
   border-radius: 2px;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 160, 0.1);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
   animation: buttonShadowSway 4s ease-in-out infinite;
   padding: 10px 8px;
   text-align: left;
-  color: var(--parchment);
+  color: var(--ink);
   font-family: inherit;
   cursor: pointer;
   min-height: 92px;
@@ -636,8 +652,8 @@ html, body {
 .choice-button:nth-child(4) { animation-delay: -3s; }
 
 @keyframes buttonShadowSway {
-  0%, 100% { box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 160, 0.1); }
-  50% { box-shadow: 0 2px 1px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 220, 160, 0.1); }
+  0%, 100% { box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 2px 1px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
 }
 
 .choice-button::before {
@@ -648,8 +664,8 @@ html, body {
   pointer-events: none;
   background-image: repeating-linear-gradient(
     45deg,
-    rgba(255, 200, 100, 0.06) 0px,
-    rgba(255, 200, 100, 0.06) 1px,
+    rgba(120, 95, 55, 0.08) 0px,
+    rgba(120, 95, 55, 0.08) 1px,
     transparent 1px,
     transparent 8px
   );
@@ -662,6 +678,24 @@ html, body {
   100% { background-position: 32px 32px; }
 }
 
+/* Animated shine sweeping along just the border ring (same shineSweep
+   motion as .shiny-text) — mask-composite carves out everything except
+   a thin ring the width of the border, so the gradient only shows there. */
+.choice-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.9) 50%, transparent 70%);
+  background-size: 250% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: shineSweep 3.2s linear infinite;
+}
+
 .choice-button.disabled {
   opacity: 0.3;
   border-color: #777;
@@ -672,7 +706,7 @@ html, body {
   border-color: var(--gold);
   transform: translateY(3px);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
-  filter: brightness(0.55);
+  filter: brightness(0.7);
   animation-play-state: paused;
 }
 
@@ -691,8 +725,8 @@ html, body {
   font-family: inherit;
   font-size: 11px;
   line-height: 1.4;
-  color: var(--parchment);
-  text-shadow: 1px 1px 0 var(--wood-dark);
+  color: var(--ink);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .choice-ripple {
@@ -806,4 +840,114 @@ html, body {
 @keyframes thinkingBlink {
   0%, 80%, 100% { opacity: 0.2; }
   40% { opacity: 1; }
+}
+
+/* ---------- Inventory ---------- */
+
+.slide-container {
+  display: flex;
+  width: 200%;
+  height: 100%;
+  transition: transform 400ms ease;
+}
+
+.slide-container.open {
+  transform: translateX(-50%);
+}
+
+.slide-panel {
+  width: 50%;
+  flex-shrink: 0;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.inventory-button {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1001;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  background-color: var(--wood-mid);
+  background-image: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px);
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  padding: 0;
+}
+
+.inventory-page {
+  width: 100%;
+  height: 100%;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 25% 20%, rgba(120, 95, 55, 0.14), transparent 55%),
+    radial-gradient(ellipse at 75% 80%, rgba(120, 95, 55, 0.12), transparent 55%),
+    repeating-linear-gradient(90deg, var(--paper-shadow) 0px, var(--paper-shadow) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: normal, normal, soft-light;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inventory-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inventory-back {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  background: var(--wood-mid);
+  color: var(--parchment);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.inventory-title {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.inventory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inventory-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 2px solid var(--frame-brown-dim);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--ink);
+  font-size: 12px;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.inventory-item-bullet {
+  color: var(--frame-brown);
+}
+
+.inventory-empty {
+  color: var(--ink);
+  opacity: 0.6;
+  font-size: 11px;
+  font-style: italic;
 }

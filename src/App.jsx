@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import BattleScene from './components/BattleScene.jsx';
+import InventoryButton from './components/InventoryButton.jsx';
+import InventoryPage from './components/InventoryPage.jsx';
 import npcsData from './data/npcs.json';
 import itemsData from './data/items.json';
 import demoScript from './data/demo-script.json';
@@ -29,6 +31,7 @@ export default function App() {
   const [crashed, setCrashed] = useState(false);
   const [endOutcome, setEndOutcome] = useState(null);
   const [endSummary, setEndSummary] = useState('');
+  const [inventoryOpen, setInventoryOpen] = useState(false);
 
   const pendingOutcomeRef = useRef(null);
   const turnIndexRef = useRef(0);
@@ -240,26 +243,36 @@ export default function App() {
         {isBooting ? (
           <div style={{ color: '#f5e6c8', padding: 24, fontSize: 12 }}>Loading Run This Town...</div>
         ) : (
-          <BattleScene
-            npcName={NPC.name}
-            npc={npcDisplay}
-            mood={current.mood}
-            patience={current.patience}
-            dialogueText={current.npc_dialogue}
-            dialogueSpeed={dialogueSpeed}
-            onDialogueFinished={handleDialogueFinished}
-            showChoices={showChoices}
-            options={current.player_options?.length ? current.player_options : []}
-            choicesDisabled={choicesDisabled}
-            onSelectOption={handleSelectOption}
-            thinking={thinking}
-            screenShake={screenShake}
-            rageOverlay={rageOverlay}
-            crashed={crashed}
-            endOutcome={endOutcome}
-            endSummary={endSummary}
-            onRestart={handleRestart}
-          />
+          <>
+            <div className={`slide-container${inventoryOpen ? ' open' : ''}`}>
+              <div className="slide-panel">
+                <BattleScene
+                  npcName={NPC.name}
+                  npc={npcDisplay}
+                  mood={current.mood}
+                  patience={current.patience}
+                  dialogueText={current.npc_dialogue}
+                  dialogueSpeed={dialogueSpeed}
+                  onDialogueFinished={handleDialogueFinished}
+                  showChoices={showChoices}
+                  options={current.player_options?.length ? current.player_options : []}
+                  choicesDisabled={choicesDisabled}
+                  onSelectOption={handleSelectOption}
+                  thinking={thinking}
+                  screenShake={screenShake}
+                  rageOverlay={rageOverlay}
+                  crashed={crashed}
+                  endOutcome={endOutcome}
+                  endSummary={endSummary}
+                  onRestart={handleRestart}
+                />
+              </div>
+              <div className="slide-panel">
+                <InventoryPage items={PLAYER_INVENTORY} onClose={() => setInventoryOpen(false)} />
+              </div>
+            </div>
+            {!inventoryOpen && <InventoryButton onClick={() => setInventoryOpen(true)} />}
+          </>
         )}
       </div>
     </div>
