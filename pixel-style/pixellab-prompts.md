@@ -139,3 +139,86 @@ and `--categories cloth_vest,skin,ui`.
   same `process.py` pipeline as a single-image generation — quantized to
   `palette.json`, alpha-binarized, validated. A sheet doesn't skip the
   quality gate, it just changes how many images arrive per pixellab call.
+
+---
+
+# Interface assets
+
+The dialogue box, choice buttons, and patience bar are currently built
+entirely in CSS (`src/styles.css`) — no image assets, and the drop
+shadows / press animation / 3D-ish feel from the deck ("buttons like old
+pacman or tetris, but with drop shadows, animated for a 3D-esque feel")
+are already implemented there. These two prompts generate art to
+*replace the flat CSS panel colors with real pixel-art texture*, layered
+underneath the existing CSS effects — not a code change by themselves.
+**Only 2 generations total**, both sheets, per the same "max value per
+prompt" rule as the character assets.
+
+## UI style-lock block (different from the character block above)
+
+```
+STYLE: Arcade cabinet pixel-art UI, in the vein of classic Pac-Man /
+Tetris title-screen chrome. Chunky rectangular shapes, hard 1px pixel
+border, minimal corner rounding (barely-there, not modern soft-radius).
+Flat fills, ONE subtle corner bevel highlight per shape (top-left edge
+lighter) — no heavy 3D render, no gradient, no glow, no drop shadow baked
+into the image (shadows/motion are added separately in CSS). Warm palette:
+dark brown / aged parchment off-white / gold accent. NOT painterly, NOT
+photorealistic, NOT soft-edged.
+```
+
+## 4. UI chrome sheet (3 cells, one generation)
+
+```
+[UI STYLE block above]
+
+SUBJECT: A 1-row x 3-column sheet of three separate UI panel textures,
+each a flat rectangular frame/border only (transparent or plain center —
+game text/content renders on top of the center later, don't put any text
+or icons inside the frames).
+
+GRID CONTENTS (left-to-right):
+1. Dialogue box frame — wide rectangular panel border, double-line frame
+   (thin dark inner line, thicker parchment-color outer line), corners
+   barely rounded
+2. Choice button frame — smaller rectangular panel border, same double-
+   line style, slightly chunkier corner bevel (this is a tappable button)
+3. Patience bar frame — a thin, wide horizontal capsule/rectangle
+   border, meant to contain a fill bar (frame only, no fill color inside)
+
+REQUIREMENTS: three distinct rectangles side by side, consistent border
+thickness/style across all three, plain or transparent background
+between/around them, no text, no icons, no watermark.
+```
+
+## 5. Strategy icon sheet (4 cells, one generation)
+
+Replaces the current Unicode suit symbols (♠ ♦ ♣ ♥) used to mark each
+dialogue strategy in `ChoiceGrid.jsx` with real pixel-art icons.
+
+```
+[UI STYLE block above]
+
+SUBJECT: A 2-row x 2-column sheet of four small standalone icons, each
+centered in its cell, same visual weight/size across all four.
+
+GRID CONTENTS:
+1. Friendly — an open hand / handshake shape
+2. Shrewd — a single narrowed eye or a coin/gem shape
+3. Aggressive — a clenched fist
+4. Deceptive — a mask or a card with a hidden face-down back
+
+REQUIREMENTS: consistent icon size and visual weight across all four,
+plain or transparent background, no text/labels/watermark, each icon
+readable as a small silhouette (this will display at ~16px).
+```
+
+## After generating
+
+Slice with `sheet_slice.py` same as the character sheets (`--rows 1
+--cols 3` / `--rows 2 --cols 2`), asset ids e.g. `ui_dialogue_frame,
+ui_button_frame, ui_patience_frame` and `icon_friendly, icon_shrewd,
+icon_aggressive, icon_deceptive`, categories `ui`. Hand me the results —
+wiring them into `DialogueBox.jsx`/`ChoiceGrid.jsx`/`PatienceBar.jsx` as
+background images (behind the existing CSS borders/shadows) is a small,
+separate step once art exists to wire in.
