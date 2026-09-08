@@ -5,9 +5,6 @@ export default function SalInventoryPage({ knownItems, secretItems, revealedItem
     <div className="inventory-page">
       <div className="inventory-header">
         <div className="inventory-title shiny-text-dark">SAL'S GOODS</div>
-        <button type="button" className="inventory-back inventory-back-right" onClick={onClose} aria-label="Close inventory">
-          ▶
-        </button>
       </div>
       <div className="inventory-list">
         {knownItems.map((item, i) => (
@@ -26,6 +23,9 @@ export default function SalInventoryPage({ knownItems, secretItems, revealedItem
           );
         })}
       </div>
+      <button type="button" className="inventory-back inventory-back-bottom" onClick={onClose} aria-label="Close inventory">
+        ◀
+      </button>
     </div>
   );
 }

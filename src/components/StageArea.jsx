@@ -22,6 +22,7 @@ export default function StageArea({ mood, patience, npc, crashed, rageOverlay })
   return (
     <div className="stage-area">
       <MoodBackground valence={mood.valence} arousal={mood.arousal} patience={patience} crashed={crashed} />
+      <div className="stage-top-trim" />
       <AmbientParticles valence={mood.valence} arousal={mood.arousal} />
       <div className="wind-streaks">
         {WIND_STREAKS.map((s, i) => (

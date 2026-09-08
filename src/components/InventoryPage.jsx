@@ -4,9 +4,6 @@ export default function InventoryPage({ items, onClose }) {
   return (
     <div className="inventory-page">
       <div className="inventory-header">
-        <button type="button" className="inventory-back" onClick={onClose} aria-label="Close inventory">
-          ◀
-        </button>
         <div className="inventory-title shiny-text-dark">INVENTORY</div>
       </div>
       <div className="inventory-list">
@@ -21,6 +18,9 @@ export default function InventoryPage({ items, onClose }) {
           ))
         )}
       </div>
+      <button type="button" className="inventory-back inventory-back-bottom" onClick={onClose} aria-label="Close inventory">
+        ▶
+      </button>
     </div>
   );
 }
