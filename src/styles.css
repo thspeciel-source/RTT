@@ -25,6 +25,45 @@ html, body {
   --gold: #ffd700;
   --amber: #d4a040;
   --danger: #c83030;
+
+  /* Saloon palette */
+  --wood-dark: #241408;
+  --wood-mid: #3d2415;
+  --wood-light: #5c3a20;
+  --brass: #c9a227;
+  --brass-dim: #8a6f1e;
+}
+
+.wood-grain {
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0px, rgba(0, 0, 0, 0.16) 1px, transparent 1px, transparent 5px),
+    linear-gradient(160deg, var(--wood-mid), var(--wood-dark) 85%);
+}
+
+/* Animated shiny/metallic text: a light sweep across a gold gradient,
+   plus a hard-edged (no blur) pixel drop shadow underneath it. */
+.shiny-text {
+  display: inline-block;
+  background-image: linear-gradient(
+    100deg,
+    var(--amber) 25%,
+    var(--gold) 42%,
+    #fff8dc 50%,
+    var(--gold) 58%,
+    var(--amber) 75%
+  );
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 0 var(--wood-dark), 2px 2px 0 rgba(0, 0, 0, 0.35);
+  animation: shineSweep 3.2s linear infinite;
+}
+
+@keyframes shineSweep {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
 .app-shell {
@@ -45,7 +84,21 @@ html, body {
   overflow: hidden;
   background: #000;
   box-shadow: 0 0 0 8px #111, 0 0 40px rgba(0, 0, 0, 0.8);
-  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-family: 'Silkscreen', 'Courier New', monospace;
+}
+
+/* Thin western-style picture-frame border around the whole display */
+.phone-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  border: 2px solid var(--brass);
+  box-shadow:
+    inset 0 0 0 1px var(--wood-dark),
+    inset 0 0 0 5px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 6px var(--brass-dim);
 }
 
 /* ---------- Battle Scene Layout ---------- */
@@ -88,7 +141,9 @@ html, body {
   justify-content: flex-end;
   gap: 8px;
   padding: 10px 12px 14px;
-  background: #0a0605;
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.14) 0px, rgba(0, 0, 0, 0.14) 1px, transparent 1px, transparent 6px),
+    linear-gradient(180deg, var(--wood-mid), var(--wood-dark) 70%);
   position: relative;
   z-index: 5;
 }
@@ -182,8 +237,9 @@ html, body {
   position: relative;
   height: 8px;
   border-radius: 2px;
-  border: 1px solid var(--dark-brown);
+  border: 1px solid var(--brass-dim);
   background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 220, 160, 0.08);
   overflow: hidden;
 }
 
@@ -393,12 +449,18 @@ html, body {
 
 .dialogue-box {
   position: relative;
-  border: 2px solid var(--parchment);
+  border: 2px solid var(--brass);
   border-radius: 2px;
-  background: var(--panel-bg);
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5), 0 0 12px rgba(255, 200, 100, 0.15);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
+    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(255, 200, 100, 0.15),
+    inset 0 1px 0 rgba(255, 220, 160, 0.12);
   padding: 10px 12px;
-  min-height: 92px;
+  height: 96px;
+  overflow: hidden;
 }
 
 .dialogue-box::before {
@@ -412,15 +474,16 @@ html, body {
 
 .dialogue-speaker {
   font-size: 10px;
-  color: var(--gold);
   margin-bottom: 6px;
   line-height: 1.4;
+  letter-spacing: 0.5px;
 }
 
 .dialogue-text {
   font-size: 12px;
   line-height: 1.5;
   color: var(--parchment);
+  text-shadow: 1px 1px 0 var(--wood-dark);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -456,10 +519,12 @@ html, body {
 .choice-button {
   position: relative;
   overflow: hidden;
-  background: var(--button-bg);
-  border: 2px solid var(--parchment);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
+    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
+  border: 2px solid var(--brass);
   border-radius: 2px;
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 160, 0.1);
   padding: 10px 8px;
   text-align: left;
   color: var(--parchment);
@@ -506,8 +571,8 @@ html, body {
 .choice-button-label {
   display: block;
   font-size: 12px;
-  color: var(--gold);
   margin-bottom: 4px;
+  letter-spacing: 0.5px;
 }
 
 .choice-button-text {
@@ -519,6 +584,7 @@ html, body {
   font-size: 12px;
   line-height: 1.35;
   color: var(--parchment);
+  text-shadow: 1px 1px 0 var(--wood-dark);
 }
 
 .choice-ripple {
@@ -564,12 +630,12 @@ html, body {
 
 .end-screen-title.failed {
   color: var(--danger);
+  text-shadow: 2px 2px 0 var(--wood-dark), 3px 3px 0 rgba(0, 0, 0, 0.4);
   animation: titleShake 400ms ease-in-out 2;
 }
 
 .end-screen-title.success {
-  color: var(--gold);
-  text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.5));
 }
 
 @keyframes titleShake {
@@ -581,6 +647,7 @@ html, body {
 .end-screen-subtitle {
   font-size: 10px;
   color: var(--parchment);
+  text-shadow: 1px 1px 0 var(--wood-dark);
   line-height: 1.6;
 }
 
@@ -589,11 +656,13 @@ html, body {
   font-family: inherit;
   font-size: 11px;
   padding: 12px 20px;
-  background: var(--button-bg);
-  border: 2px solid var(--gold);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
+    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
+  border: 2px solid var(--brass);
   border-radius: 2px;
   color: var(--gold);
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 160, 0.1);
   cursor: pointer;
   animation: fadeIn 400ms ease forwards;
   opacity: 0;

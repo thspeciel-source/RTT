@@ -30,7 +30,7 @@ export default function ChoiceGrid({ options, disabled, onSelect }) {
           onClick={(e) => handleClick(e, i)}
           disabled={disabled}
         >
-          <span className="choice-button-label">
+          <span className="choice-button-label shiny-text">
             {STRATEGY_ICON[opt.strategy] || '•'} {opt.label}
           </span>
           <span className="choice-button-text">{opt.text}</span>

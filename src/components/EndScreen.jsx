@@ -38,7 +38,7 @@ export default function EndScreen({ outcome, summary, onRestart }) {
           ))}
         </div>
       )}
-      <div className={`end-screen-title ${isFailure ? 'failed' : 'success'}`}>
+      <div className={`end-screen-title ${isFailure ? 'failed' : 'success shiny-text'}`}>
         {isFailure ? 'DEAL FAILED' : 'DEAL MADE'}
       </div>
       <div className="end-screen-subtitle">

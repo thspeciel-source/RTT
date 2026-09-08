@@ -11,7 +11,7 @@ export default function DialogueBox({ speakerName, text, speed = 40, onFinished 
 
   return (
     <div className="dialogue-box" onClick={handleTap} role="button" tabIndex={0}>
-      {speakerName && <div className="dialogue-speaker">{speakerName.toUpperCase()}:</div>}
+      {speakerName && <div className="dialogue-speaker shiny-text">{speakerName.toUpperCase()}:</div>}
       <div className="dialogue-text">
         {displayedText}
         {isPageComplete ? (
