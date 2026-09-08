@@ -42,6 +42,7 @@ export function getDefaultResponse() {
     mood: { valence: 0, arousal: 0.2 },
     patience: 0.5,
     trade_state: 'none',
+    revealed_item: null,
     player_options: getDefaultOptions()
   };
 }
@@ -60,6 +61,8 @@ function validateCore(data) {
   };
 
   data.patience = clamp(data.patience ?? 0.5, 0, 1);
+
+  data.revealed_item = typeof data.revealed_item === 'string' && data.revealed_item.trim() ? data.revealed_item : null;
 
   if (!data.npc_dialogue || typeof data.npc_dialogue !== 'string') {
     data.npc_dialogue = '...';

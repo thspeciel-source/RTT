@@ -7,6 +7,13 @@
     "goal": "get the best possible deal without giving up the saloon deed for less than it's worth",
     "initialMood": { "valence": 0.0, "arousal": 0.3 },
     "inventory": ["Deed to the Saloon", "Bottle of Aged Whiskey"],
+    "secret_inventory": [
+      "A Faded Photograph",
+      "A Sealed Letter, Never Opened",
+      "A Brass Key to Nowhere",
+      "A Chipped Poker Chip",
+      "A Tarnished Silver Locket"
+    ],
     "voice": {
       "accent": "Old West drawl — gravelly, unhurried, drops g's, never wastes a word",
       "vernacular": ["ain't", "reckon", "plumb", "fixin' to", "mighty", "partner", "stranger"],

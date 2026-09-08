@@ -12,6 +12,12 @@ import bubbleAngerVein from '../assets/bubbles/bubble_anger_vein.png';
 import bubbleHeart from '../assets/bubbles/bubble_heart.png';
 import bubbleSparkle from '../assets/bubbles/bubble_sparkle.png';
 import bubbleEllipsis from '../assets/bubbles/bubble_ellipsis.png';
+import suitSpade from '../assets/ui/suit_spade.png';
+import suitDiamond from '../assets/ui/suit_diamond.png';
+import suitClub from '../assets/ui/suit_club.png';
+import suitHeart from '../assets/ui/suit_heart.png';
+import pouchIcon from '../assets/ui/pouch_icon.png';
+import strongboxIcon from '../assets/ui/strongbox_icon.png';
 
 // Real pixellab.ai art for Dusty Sal. NPC_BODY is the full character at
 // native resolution (128x253) with a neutral expression baked in — face
@@ -46,3 +52,13 @@ export const BUBBLE_IMAGES = {
   sparkle: bubbleSparkle,
   ellipsis: bubbleEllipsis
 };
+
+export const SUIT_IMAGES = {
+  friendly: suitSpade,
+  shrewd: suitDiamond,
+  aggressive: suitClub,
+  deceptive: suitHeart
+};
+
+export const POUCH_ICON = pouchIcon;
+export const STRONGBOX_ICON = strongboxIcon;

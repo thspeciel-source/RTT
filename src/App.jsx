@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import BattleScene from './components/BattleScene.jsx';
 import InventoryButton from './components/InventoryButton.jsx';
 import InventoryPage from './components/InventoryPage.jsx';
+import SalInventoryPage from './components/SalInventoryPage.jsx';
 import npcsData from './data/npcs.json';
 import itemsData from './data/items.json';
 import demoScript from './data/demo-script.json';
 import { buildSystemPrompt, getNPCResponse } from './systems/llm.js';
 import { getDefaultResponse } from './systems/validation.js';
 import { createPreloadCache } from './systems/preloader.js';
+import { STRONGBOX_ICON } from './systems/sprite-assets.js';
 
 const NPC = npcsData.dusty_sal;
 const PLAYER_INVENTORY = itemsData.player;
@@ -31,7 +33,8 @@ export default function App() {
   const [crashed, setCrashed] = useState(false);
   const [endOutcome, setEndOutcome] = useState(null);
   const [endSummary, setEndSummary] = useState('');
-  const [inventoryOpen, setInventoryOpen] = useState(false);
+  const [openPanel, setOpenPanel] = useState('none'); // 'none' | 'player' | 'sal'
+  const [revealedItems, setRevealedItems] = useState([]);
 
   const pendingOutcomeRef = useRef(null);
   const turnIndexRef = useRef(0);
@@ -114,6 +117,9 @@ export default function App() {
     if (resp.trade_state === 'hostile_end') {
       runCrashIntro(resp);
       return;
+    }
+    if (resp.revealed_item && NPC.secret_inventory?.includes(resp.revealed_item)) {
+      setRevealedItems((prev) => (prev.includes(resp.revealed_item) ? prev : [...prev, resp.revealed_item]));
     }
     setNpcDisplay(toDisplay(resp));
     setCurrent(resp);
@@ -244,7 +250,12 @@ export default function App() {
           <div style={{ color: '#f5e6c8', padding: 24, fontSize: 12 }}>Loading Run This Town...</div>
         ) : (
           <>
-            <div className={`slide-container${inventoryOpen ? ' open' : ''}`}>
+            <div
+              className={`slide-container${openPanel === 'player' ? ' open-player' : ''}${openPanel === 'sal' ? ' open-sal' : ''}`}
+            >
+              <div className="slide-panel">
+                <InventoryPage items={PLAYER_INVENTORY} onClose={() => setOpenPanel('none')} />
+              </div>
               <div className="slide-panel">
                 <BattleScene
                   npcName={NPC.name}
@@ -268,10 +279,27 @@ export default function App() {
                 />
               </div>
               <div className="slide-panel">
-                <InventoryPage items={PLAYER_INVENTORY} onClose={() => setInventoryOpen(false)} />
+                <SalInventoryPage
+                  knownItems={NPC.inventory}
+                  secretItems={NPC.secret_inventory || []}
+                  revealedItems={revealedItems}
+                  onClose={() => setOpenPanel('none')}
+                />
               </div>
+              <div className="panel-seam panel-seam-left" />
+              <div className="panel-seam panel-seam-right" />
             </div>
-            {!inventoryOpen && <InventoryButton onClick={() => setInventoryOpen(true)} />}
+            {openPanel === 'none' && (
+              <>
+                <InventoryButton onClick={() => setOpenPanel('player')} />
+                <InventoryButton
+                  onClick={() => setOpenPanel('sal')}
+                  icon={STRONGBOX_ICON}
+                  className="sal-inventory-button"
+                  label="Open Sal's goods"
+                />
+              </>
+            )}
           </>
         )}
       </div>

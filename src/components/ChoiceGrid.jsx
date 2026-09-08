@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-
-const STRATEGY_ICON = {
-  friendly: '♠',
-  shrewd: '♦',
-  aggressive: '♣',
-  deceptive: '♥'
-};
+import { SUIT_IMAGES } from '../systems/sprite-assets.js';
 
 export default function ChoiceGrid({ options, disabled, onSelect }) {
   const [pressedIndex, setPressedIndex] = useState(null);
@@ -31,7 +25,10 @@ export default function ChoiceGrid({ options, disabled, onSelect }) {
           disabled={disabled}
         >
           <span className="choice-button-label shiny-text-dark">
-            {STRATEGY_ICON[opt.strategy] || '•'} {opt.label}
+            {SUIT_IMAGES[opt.strategy] && (
+              <img className="suit-icon" src={SUIT_IMAGES[opt.strategy]} alt="" />
+            )}
+            {opt.label}
           </span>
           <span className="choice-button-text">{opt.text}</span>
           {ripple && ripple.index === i && (

@@ -12,12 +12,22 @@ Words you reach for: ${npc.voice.vernacular.join(', ')}.
 `;
 }
 
+function secretInventoryBlock(npc) {
+  if (!npc.secret_inventory || npc.secret_inventory.length === 0) return '';
+  return `
+You also secretly own these ${npc.secret_inventory.length} items, which you have NOT told the player about yet: ${npc.secret_inventory.join(', ')}.
+These are the ONLY secret items you have — never invent, name, or hint at any secret item that isn't on this exact list.
+You may choose to reveal one of them by name in your dialogue if it fits the moment (e.g. as a bargaining chip, a story, or a threat). Most turns you should reveal nothing.
+`;
+}
+
 export function buildSystemPrompt(npc, playerInventory) {
   return `You are ${npc.name}, ${npc.personality}.
 ${npc.backstory}
 You own: ${npc.inventory.join(', ')}.
 Your goal: ${npc.goal}. You will try to get the best deal possible.
 ${voiceBlock(npc)}
+${secretInventoryBlock(npc)}
 Your patience starts at: 1.0 (fully patient). It decreases when the player wastes your time, is rude, makes bad offers, or stalls. It can recover slightly if the player says something interesting or makes a good offer. When patience hits 0, you lose your temper and end the conversation angrily.
 Your mood starts at: valence ${npc.initialMood.valence}, arousal ${npc.initialMood.arousal}.
 
@@ -38,6 +48,7 @@ The JSON MUST use this exact schema. Every field is required:
   },
   "patience": "(number) 0.0 to 1.0. Starts at 1.0. Decrease when frustrated, increase slightly when engaged. Never increase more than 0.05 per turn. Decrease by 0.05-0.15 depending on severity. At 0, you MUST set trade_state to hostile_end.",
   "trade_state": "(string) MUST be one of: none, offered, accepted, rejected, hostile_end",
+  "revealed_item": "(string or null) If npc_dialogue reveals one of your secret items THIS turn, put its exact name here (copied exactly from your secret item list). Otherwise null. Never put an item here that isn't on your secret item list, and never repeat one you've already revealed in an earlier turn.",
   "player_options": [
     {
       "label": "(string) Short label, max 15 chars",
@@ -57,7 +68,8 @@ RULES:
 - player_options MUST contain exactly 4 items.
 - Each option MUST use a different strategy value.
 - pre_responses MUST contain exactly 4 items keyed "0" through "3", one per player_option in the SAME response, in order.
-- Each pre_response uses the same schema as the top-level (npc_dialogue, face, arms, bubble, body_anim, mood, patience, trade_state, player_options) but does NOT include its own pre_responses.
+- Each pre_response uses the same schema as the top-level (npc_dialogue, face, arms, bubble, body_anim, mood, patience, trade_state, revealed_item, player_options) but does NOT include its own pre_responses.
+- Only put a value in revealed_item on the turn where you actually say that item's name out loud in npc_dialogue. Do not reveal more than one secret item per turn.
 - face, arms, bubble, body_anim MUST be from the provided lists. Do not invent new values.
 - Mood should shift gradually — no more than 0.3 on either axis per turn unless something dramatic happens.
 - The 4 player options should represent genuinely different approaches. Do not generate 4 variations of the same idea.
