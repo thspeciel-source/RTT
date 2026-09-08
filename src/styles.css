@@ -269,6 +269,16 @@ html, body {
   image-rendering: crisp-edges;
 }
 
+.npc-shadow-img {
+  transform-origin: 50% 85%;
+  animation: shadowHover 2.6s ease-in-out infinite;
+}
+
+@keyframes shadowHover {
+  0%, 100% { transform: scale(1); opacity: 0.92; }
+  50% { transform: scale(1.03); opacity: 1; }
+}
+
 .npc-bubble {
   position: absolute;
   top: -14%;

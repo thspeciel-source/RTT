@@ -9,8 +9,13 @@ export default function NPCSprite({ face, bubble, bodyAnim, rageOverlay }) {
 
   return (
     <div className="npc-sprite-wrap">
+      {/* Deliberately outside .npc-sprite: the shadow should NOT inherit
+          body_anim transforms (shake, bounce, slam, jump...) — it stays
+          grounded while the character moves above it, with its own
+          separate, barely-there hover so it doesn't read as perfectly
+          static either. */}
+      <img className="npc-layer-img npc-shadow-img" src={NPC_SHADOW} alt="" />
       <div className={`npc-sprite anim-${bodyAnim || 'idle'}`}>
-        <img className="npc-layer-img" src={NPC_SHADOW} alt="" />
         <img className="npc-layer-img" src={NPC_BODY} alt="" />
 
         {/* No art for this face key yet (or it's "neutral") -> body's own baked-in
