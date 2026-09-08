@@ -1,4 +1,32 @@
-# pixellab.ai prompts — Dusty Sal
+# pixellab.ai prompts — Dusty Sal & the player
+
+## Player character (back-facing)
+
+New character, so it needs its own init image first — same process as
+Sal, just with **Direction: Back** instead of Front (the player is never
+seen from the front in this scene; you're always looking over their
+shoulder at the NPC).
+
+**Description:**
+```
+A traveler in a dusty Old West town, seen from behind. Simple shirt, vest, trousers, boots, wide-brimmed hat. Plain pixel art game character.
+```
+
+**Settings:** Direction: Back · View: None · Detail: Medium · Outline: Default · Size: 128×224
+
+Same rule as Sal: one sentence, no style paragraph, generate a few and
+pick the cleanest silhouette. Since it's back-facing, there's no face to
+worry about — this is likely a single static sprite with no expression
+variants needed, matching how it's used in-game (`PlayerSprite.jsx`
+today has no pose/expression swapping).
+
+Hand it to me the same way: drop the PNG in `assets/_incoming/player_body/source.png`
+and tell me — I'll crop it to its own content bbox and swap it in for
+the current placeholder in `src/assets/sprites/player_base.png`.
+
+---
+
+# Dusty Sal
 
 Simplified after the first pass over-detailed the description field and
 confused the model. Rule now: **description = one short plain sentence**.

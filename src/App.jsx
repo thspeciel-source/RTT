@@ -154,7 +154,7 @@ export default function App() {
   }
 
   async function handleSelectOption(index) {
-    if (phase !== 'choices') return;
+    if (phase !== 'choices' && phase !== 'dialogue') return;
     const chosenOption = current.player_options[index];
     if (!chosenOption) return;
 
@@ -230,7 +230,9 @@ export default function App() {
   const isBooting = mode === 'detecting' || phase === 'boot';
   const thinking = phase === 'thinking';
   const showChoices = phase === 'choices' || phase === 'dialogue';
-  const choicesDisabled = phase !== 'choices';
+  // Options are clickable the moment they're on screen — no need to wait
+  // for the typewriter to finish; picking one mid-type just moves on.
+  const choicesDisabled = false;
 
   return (
     <div className="app-shell">

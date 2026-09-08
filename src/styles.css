@@ -32,6 +32,13 @@ html, body {
   --wood-light: #5c3a20;
   --brass: #c9a227;
   --brass-dim: #8a6f1e;
+  --frame-brown: #a67c52;
+  --frame-brown-dim: #6e5133;
+
+  /* Manuscript (dialogue box reading surface) */
+  --paper: #d9c9a0;
+  --paper-shadow: #c4b284;
+  --ink: #2b1c10;
 }
 
 .wood-grain {
@@ -66,6 +73,27 @@ html, body {
   100% { background-position: -200% center; }
 }
 
+/* Same shine, but ink-dark for use on the light manuscript paper (the
+   gold version above doesn't have enough contrast there). */
+.shiny-text-dark {
+  display: inline-block;
+  background-image: linear-gradient(
+    100deg,
+    var(--ink) 25%,
+    #4a3320 42%,
+    #7a5c3e 50%,
+    #4a3320 58%,
+    var(--ink) 75%
+  );
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
+  animation: shineSweep 3.2s linear infinite;
+}
+
 .app-shell {
   width: 100vw;
   height: 100dvh;
@@ -94,11 +122,30 @@ html, body {
   inset: 0;
   pointer-events: none;
   z-index: 999;
-  border: 2px solid var(--brass);
+  border: 2px solid var(--frame-brown);
   box-shadow:
     inset 0 0 0 1px var(--wood-dark),
     inset 0 0 0 5px rgba(0, 0, 0, 0.35),
-    inset 0 0 0 6px var(--brass-dim);
+    inset 0 0 0 6px var(--frame-brown-dim);
+}
+
+/* Little pixel-art corner brackets on top of the frame */
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background-image:
+    url('./assets/ui/corner_tl.png'),
+    url('./assets/ui/corner_tr.png'),
+    url('./assets/ui/corner_bl.png'),
+    url('./assets/ui/corner_br.png');
+  background-repeat: no-repeat;
+  background-position: top left, top right, bottom left, bottom right;
+  background-size: 24px 24px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 /* ---------- Battle Scene Layout ---------- */
@@ -138,7 +185,7 @@ html, body {
   flex: 0 0 45%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 8px;
   padding: 10px 12px 14px;
   background-image:
@@ -182,15 +229,32 @@ html, body {
   box-shadow: inset 0 0 90px rgba(200, 30, 30, 0.55);
 }
 
-.ground-line {
+/* ---------- Wind ---------- */
+
+.wind-streaks {
   position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 14%;
-  height: 1px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wind-streak {
+  position: absolute;
+  right: -20%;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  animation-name: windDrift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes windDrift {
+  0% { transform: translateX(0); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.5; }
+  100% { transform: translateX(-140%); opacity: 0; }
 }
 
 /* ---------- Ambient Particles ---------- */
@@ -449,15 +513,18 @@ html, body {
 
 .dialogue-box {
   position: relative;
-  border: 2px solid var(--brass);
+  border: 2px solid var(--frame-brown);
   border-radius: 2px;
+  background-color: var(--paper);
   background-image:
-    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
-    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
+    radial-gradient(ellipse at 18% 25%, rgba(120, 95, 55, 0.16), transparent 55%),
+    radial-gradient(ellipse at 82% 75%, rgba(120, 95, 55, 0.14), transparent 55%),
+    repeating-linear-gradient(90deg, var(--paper-shadow) 0px, var(--paper-shadow) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: normal, normal, soft-light;
   box-shadow:
     0 4px 0 rgba(0, 0, 0, 0.5),
-    0 0 12px rgba(255, 200, 100, 0.15),
-    inset 0 1px 0 rgba(255, 220, 160, 0.12);
+    0 0 12px rgba(255, 200, 100, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
   padding: 10px 12px;
   height: 96px;
   overflow: hidden;
@@ -467,7 +534,7 @@ html, body {
   content: '';
   position: absolute;
   inset: 3px;
-  border: 1px solid var(--dark-brown);
+  border: 1px solid var(--frame-brown-dim);
   border-radius: 1px;
   pointer-events: none;
 }
@@ -482,8 +549,8 @@ html, body {
 .dialogue-text {
   font-size: 12px;
   line-height: 1.5;
-  color: var(--parchment);
-  text-shadow: 1px 1px 0 var(--wood-dark);
+  color: var(--ink);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -525,13 +592,23 @@ html, body {
   border: 2px solid var(--brass);
   border-radius: 2px;
   box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 160, 0.1);
+  animation: buttonShadowSway 4s ease-in-out infinite;
   padding: 10px 8px;
   text-align: left;
   color: var(--parchment);
   font-family: inherit;
   cursor: pointer;
   min-height: 92px;
-  transition: opacity 300ms ease, border-color 150ms ease;
+  transition: opacity 300ms ease, border-color 150ms ease, filter 80ms ease-out;
+}
+
+.choice-button:nth-child(2) { animation-delay: -1s; }
+.choice-button:nth-child(3) { animation-delay: -2s; }
+.choice-button:nth-child(4) { animation-delay: -3s; }
+
+@keyframes buttonShadowSway {
+  0%, 100% { box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 220, 160, 0.1); }
+  50% { box-shadow: 0 2px 1px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 220, 160, 0.1); }
 }
 
 .choice-button::before {
@@ -566,6 +643,8 @@ html, body {
   border-color: var(--gold);
   transform: translateY(3px);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
+  filter: brightness(0.55);
+  animation-play-state: paused;
 }
 
 .choice-button-label {
@@ -577,12 +656,12 @@ html, body {
 
 .choice-button-text {
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.35;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.4;
   color: var(--parchment);
   text-shadow: 1px 1px 0 var(--wood-dark);
 }
