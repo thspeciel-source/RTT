@@ -233,7 +233,6 @@ html, body {
   position: relative;
   width: 100%;
   height: 100%;
-  animation: idle 1.5s ease-in-out infinite;
 }
 
 .player-layer-img {
@@ -379,7 +378,7 @@ html, body {
   75% { transform: translateX(1px); }
 }
 
-.anim-idle { animation: idle 1.5s ease-in-out infinite; }
+.anim-idle { animation: none; }
 .anim-bounce { animation: bounce 300ms ease-out; }
 .anim-shake { animation: shake 400ms ease-in-out; }
 .anim-recoil { animation: recoil 500ms ease-out; }
