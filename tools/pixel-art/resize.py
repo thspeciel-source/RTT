@@ -52,6 +52,34 @@ def downscale_to_grid(img, target_w, target_h, fit="contain"):
     return canvas
 
 
+def fit_into_region(img, canvas_w, canvas_h, region, padding=0):
+    """
+    Tight-crops img to its own content, scales it (aspect-preserving) to
+    fit inside `region` (x0,y0,x1,y1), and pastes it centered in that
+    region on a canvas_w x canvas_h transparent canvas. Use this for a
+    layer that should occupy a SUB-area of the shared game canvas (e.g.
+    a head crop that belongs in the top quarter) — unlike
+    downscale_to_grid(), which fits/stretches to the WHOLE canvas.
+    """
+    img = img.convert("RGBA")
+    bbox = img.getbbox()
+    if bbox:
+        img = img.crop(bbox)
+
+    x0, y0, x1, y1 = region
+    rw, rh = (x1 - x0 - 2 * padding), (y1 - y0 - 2 * padding)
+    scale = min(rw / img.width, rh / img.height)
+    new_w = max(1, round(img.width * scale))
+    new_h = max(1, round(img.height * scale))
+    resized = img.resize((new_w, new_h), Image.BOX if scale < 1 else Image.NEAREST)
+
+    canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    off_x = x0 + padding + (rw - new_w) // 2
+    off_y = y0 + padding + (rh - new_h) // 2
+    canvas.alpha_composite(resized, (off_x, off_y))
+    return canvas
+
+
 def upscale_pixelated(img, factor):
     """Integer nearest-neighbor upscale for previewing at display size."""
     w, h = img.size
