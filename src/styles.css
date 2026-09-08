@@ -504,7 +504,7 @@ html, body {
   color: var(--parchment);
   font-family: inherit;
   cursor: pointer;
-  min-height: 44px;
+  min-height: 92px;
   transition: opacity 300ms ease, border-color 150ms ease;
 }
 
@@ -551,11 +551,12 @@ html, body {
 
 .choice-button-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 11px;
-  line-height: 1.4;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.35;
   color: var(--parchment);
 }
 
