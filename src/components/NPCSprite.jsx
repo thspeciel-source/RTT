@@ -1,13 +1,9 @@
 import React from 'react';
 import emoteMap from '../data/emote-map.json';
-import { NPC_BODY, ARM_IMAGES, FACE_IMAGES, BUBBLE_IMAGES } from '../systems/sprite-assets.js';
+import { NPC_BODY, FACE_IMAGES, BUBBLE_IMAGES } from '../systems/sprite-assets.js';
 
-export default function NPCSprite({ face, arms, bubble, bodyAnim, rageOverlay }) {
-  const faceStyle = emoteMap.face[face] || emoteMap.face.neutral;
-  const armStyle = emoteMap.arms[arms] || emoteMap.arms.relaxed;
+export default function NPCSprite({ face, bubble, bodyAnim, rageOverlay }) {
   const bubbleStyle = emoteMap.bubble[bubble];
-
-  const armImage = ARM_IMAGES[arms];
   const faceImage = FACE_IMAGES[face];
   const bubbleImage = bubble && BUBBLE_IMAGES[bubble];
 
@@ -16,20 +12,10 @@ export default function NPCSprite({ face, arms, bubble, bodyAnim, rageOverlay })
       <div className={`npc-sprite anim-${bodyAnim || 'idle'}`}>
         <img className="npc-layer-img" src={NPC_BODY} alt="" />
 
-        {armImage ? (
-          <img className="npc-layer-img" src={armImage} alt="" />
-        ) : (
-          <>
-            <div className="npc-layer npc-arm-left" style={{ backgroundColor: armStyle.color }} />
-            <div className="npc-layer npc-arm-right" style={{ backgroundColor: armStyle.color }} />
-          </>
-        )}
-
-        {faceImage ? (
-          <img className="npc-layer-img" src={faceImage} alt="" />
-        ) : (
-          <div className="npc-layer npc-face" style={{ backgroundColor: faceStyle.color }} title={faceStyle.label} />
-        )}
+        {/* No art for this face key yet (or it's "neutral") -> body's own baked-in
+            neutral expression shows through untouched. No colored-box fallback
+            here anymore; that would clash badly against real illustrated art. */}
+        {faceImage && <img className="npc-layer-img" src={faceImage} alt="" />}
 
         {bubbleStyle &&
           (bubbleImage ? (

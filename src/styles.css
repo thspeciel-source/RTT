@@ -248,9 +248,9 @@ html, body {
 .npc-sprite-wrap {
   position: absolute;
   right: 6%;
-  bottom: 15%;
-  width: 120px;
-  height: 200px;
+  bottom: 12%;
+  width: 140px;
+  height: 277px;
 }
 
 .npc-sprite {
@@ -267,35 +267,6 @@ html, body {
   height: 100%;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-}
-
-.npc-layer {
-  position: absolute;
-  transition: background-color 300ms ease;
-}
-
-.npc-face {
-  bottom: 60%;
-  left: 34%;
-  width: 32%;
-  height: 14%;
-  border-radius: 4px;
-}
-
-.npc-arm-left,
-.npc-arm-right {
-  bottom: 30%;
-  width: 16%;
-  height: 40%;
-  border-radius: 4px;
-}
-
-.npc-arm-left {
-  left: 4%;
-}
-
-.npc-arm-right {
-  right: 4%;
 }
 
 .npc-bubble {

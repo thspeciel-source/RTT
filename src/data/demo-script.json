@@ -34,7 +34,7 @@
     },
     {
       "npc_dialogue": "A watch? That's what you're wasting my time with? I've seen better in a pawn shop bin.",
-      "face": "frown",
+      "face": "sad",
       "arms": "crossed_arms",
       "bubble": "sweat_drop",
       "body_anim": "lean_back",
@@ -67,7 +67,7 @@
   ],
   "endingAccepted": {
     "npc_dialogue": "...Alright. Alright! Deal. Don't make me regret this, stranger.",
-    "face": "smile",
+    "face": "grin",
     "arms": "hand_out",
     "bubble": "sparkle",
     "body_anim": "bounce",

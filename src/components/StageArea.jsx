@@ -15,7 +15,6 @@ export default function StageArea({ mood, patience, npc, crashed, rageOverlay })
       <PlayerSprite />
       <NPCSprite
         face={npc.face}
-        arms={npc.arms}
         bubble={npc.bubble}
         bodyAnim={npc.body_anim}
         rageOverlay={rageOverlay}
