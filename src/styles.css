@@ -126,7 +126,9 @@ html, body {
   }
 }
 
-/* Thin western-style picture-frame border around the whole display */
+/* Thin western-style picture-frame border around the whole display.
+   Clipped short of the very bottom edge — the dirt footer banner sits
+   flush against the screen edge there instead of behind another border. */
 .phone-frame::after {
   content: '';
   position: absolute;
@@ -138,6 +140,7 @@ html, body {
     inset 0 0 0 1px var(--wood-dark),
     inset 0 0 0 5px rgba(0, 0, 0, 0.35),
     inset 0 0 0 6px var(--frame-brown-dim);
+  clip-path: inset(0 0 14px 0);
 }
 
 /* Little pixel-art corner brackets on top of the frame */
@@ -242,12 +245,26 @@ html, body {
 
 /* ---------- Wind ---------- */
 
+.stage-dirt-road {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 33.34%;
+  background-image: url('./assets/ui/dirt_texture.png');
+  background-repeat: repeat;
+  background-size: 20px 20px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4) inset;
+}
+
 .stage-top-trim {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 20px;
+  height: 40px;
   z-index: 5;
   background-image: url('./assets/ui/dirt_texture.png');
   background-repeat: repeat;
@@ -419,6 +436,18 @@ html, body {
   height: 100%;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+  /* Sal's art comes pre-outlined from its generator; the player's photo-
+     extracted art doesn't, so synthesize a matching discreet dark rim
+     around the silhouette with stacked hard-edged drop-shadows. */
+  filter:
+    drop-shadow(1.5px 0 0 var(--wood-dark))
+    drop-shadow(-1.5px 0 0 var(--wood-dark))
+    drop-shadow(0 1.5px 0 var(--wood-dark))
+    drop-shadow(0 -1.5px 0 var(--wood-dark))
+    drop-shadow(1.1px 1.1px 0 var(--wood-dark))
+    drop-shadow(-1.1px 1.1px 0 var(--wood-dark))
+    drop-shadow(1.1px -1.1px 0 var(--wood-dark))
+    drop-shadow(-1.1px -1.1px 0 var(--wood-dark));
 }
 
 .npc-sprite-wrap {

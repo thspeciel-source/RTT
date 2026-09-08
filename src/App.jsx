@@ -27,7 +27,7 @@ export default function App() {
   const [phase, setPhase] = useState('boot'); // boot | thinking | dialogue | choices | ended
   const [current, setCurrent] = useState(getDefaultResponse());
   const [npcDisplay, setNpcDisplay] = useState(toDisplay(getDefaultResponse()));
-  const [dialogueSpeed, setDialogueSpeed] = useState(40);
+  const [dialogueSpeed, setDialogueSpeed] = useState(20);
   const [screenShake, setScreenShake] = useState(false);
   const [rageOverlay, setRageOverlay] = useState(false);
   const [crashed, setCrashed] = useState(false);
@@ -123,7 +123,7 @@ export default function App() {
     }
     setNpcDisplay(toDisplay(resp));
     setCurrent(resp);
-    setDialogueSpeed(40);
+    setDialogueSpeed(20);
     setCrashed(false);
     pendingOutcomeRef.current = resp.trade_state === 'accepted' ? 'accepted' : null;
     setPhase('dialogue');
@@ -139,7 +139,7 @@ export default function App() {
     setRageOverlay(true);
     await sleep(600);
     setCurrent(resp);
-    setDialogueSpeed(25);
+    setDialogueSpeed(12);
     pendingOutcomeRef.current = 'hostile_end';
   }
 
