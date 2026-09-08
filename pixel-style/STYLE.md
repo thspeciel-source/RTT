@@ -5,6 +5,25 @@ match dimensions already wired into the shipped game (`src/styles.css`,
 `src/components/NPCSprite.jsx`, `src/components/PlayerSprite.jsx`) — changing
 these numbers requires updating that CSS too, so don't change them casually.
 
+## Reference & tooling
+
+Per the project's own art-direction deck: **"Pixel-art, Pokémon-level
+sprite graphics — the value is in the content and systems, not visual
+immersion."** Concretely, that means Pokémon Gen 3/4 (GBA/DS) **battle
+sprite** fidelity is the target, not overworld-tile fidelity — those
+sprites are small, chibi-proportioned, bold-silhouetted, and flat-shaded
+with 1-2 shading steps, exactly what's already codified below. Generation
+happens via **pixellab.ai** (a pixel-art-native generator, not a general
+diffusion model) — see `pixel-style/pixellab-prompts.md` for ready-to-use
+prompts. This file is what any generated result gets checked against
+before it's approved.
+
+The UI (buttons, panels, dialogue box) is a separate, already-consistent
+style — "enhanced modernized retro: old arcade-button shapes with drop
+shadows and animation for a 3D-ish feel" — already implemented in
+`src/styles.css` and out of scope for this document, which covers
+character/prop sprites only.
+
 ## Canvas / resolution
 
 | Layer type | Native canvas | Display scale | Displayed size |

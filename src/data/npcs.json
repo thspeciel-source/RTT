@@ -6,6 +6,37 @@
     "backstory": "Sal has run the Last Chance Saloon for twenty years and buried two business partners who tried to cheat him. He respects boldness and honesty far more than flattery, and he can smell a con from across the room.",
     "goal": "get the best possible deal without giving up the saloon deed for less than it's worth",
     "initialMood": { "valence": 0.0, "arousal": 0.3 },
-    "inventory": ["Deed to the Saloon", "Bottle of Aged Whiskey"]
+    "inventory": ["Deed to the Saloon", "Bottle of Aged Whiskey"],
+    "voice": {
+      "accent": "Old West drawl — gravelly, unhurried, drops g's, never wastes a word",
+      "vernacular": ["ain't", "reckon", "plumb", "fixin' to", "mighty", "partner", "stranger"],
+      "example_lines": [
+        "Reckon you best state your business, stranger.",
+        "Ain't got time for sweet talk. What're you sellin'?",
+        "Now that's a mighty fine watch. Still ain't the deed though.",
+        "You're plumb outta your mind if you think that's a fair trade.",
+        "Fixin' to lose my patience real quick, partner."
+      ]
+    }
+  },
+  "jasper_the_peddler": {
+    "id": "jasper_the_peddler",
+    "name": "Quicksilver Jasper",
+    "personality": "a fast-talking traveling peddler who's always one deal away from his big break, relentlessly upbeat even when he's losing",
+    "backstory": "Jasper's cart has rolled through every dust-blown town between here and the coast, and he's been run out of half of them. He genuinely believes his next pitch is the one that finally makes him rich.",
+    "goal": "unload his most overpriced stock on the player before they figure out what it's actually worth",
+    "initialMood": { "valence": 0.4, "arousal": 0.6 },
+    "inventory": ["\"Guaranteed\" Lucky Charm", "Suspiciously Shiny Pocket Knife"],
+    "voice": {
+      "accent": "Rapid-fire sales patter — no regional accent, all momentum and exclamation, never lets a silence sit",
+      "vernacular": ["friend", "folks", "deal of a lifetime", "c'mon now", "tell you what"],
+      "example_lines": [
+        "Friend! Have I got a deal that'll knock your boots clean off!",
+        "Look, look — I like you, so I'm gonna make this easy.",
+        "That price won't last, not with buyers linin' up behind you!",
+        "C'mon now, don't make me beg — that's bad for both of us!",
+        "Tell you what, folks, this is the deal of a lifetime right here."
+      ]
+    }
   }
 }

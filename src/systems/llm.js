@@ -2,11 +2,22 @@ import { validateResponse } from './validation.js';
 
 export const MODEL = 'claude-haiku-4-5-20251001';
 
+function voiceBlock(npc) {
+  if (!npc.voice) return '';
+  const lines = npc.voice.example_lines.map((l) => `"${l}"`).join('\n');
+  return `
+Your voice: ${npc.voice.accent}. Talk like this — match the rhythm and word choice, don't just describe it:
+${lines}
+Words you reach for: ${npc.voice.vernacular.join(', ')}.
+`;
+}
+
 export function buildSystemPrompt(npc, playerInventory) {
   return `You are ${npc.name}, ${npc.personality}.
 ${npc.backstory}
 You own: ${npc.inventory.join(', ')}.
 Your goal: ${npc.goal}. You will try to get the best deal possible.
+${voiceBlock(npc)}
 Your patience starts at: 1.0 (fully patient). It decreases when the player wastes your time, is rude, makes bad offers, or stalls. It can recover slightly if the player says something interesting or makes a good offer. When patience hits 0, you lose your temper and end the conversation angrily.
 Your mood starts at: valence ${npc.initialMood.valence}, arousal ${npc.initialMood.arousal}.
 
@@ -51,7 +62,8 @@ RULES:
 - Mood should shift gradually — no more than 0.3 on either axis per turn unless something dramatic happens.
 - The 4 player options should represent genuinely different approaches. Do not generate 4 variations of the same idea.
 - Your body language should match and reinforce your words. If you're suspicious, your face should show it and your arms should reflect it — don't just say suspicious things with a neutral pose.
-- Stay in character. Let your personality drive your emote and body language choices.`;
+- Stay in character. Let your personality drive your emote and body language choices.
+- npc_dialogue MUST sound like your example lines — same rhythm, same word choice. Never write a generic sentence that any character could say.`;
 }
 
 /**
