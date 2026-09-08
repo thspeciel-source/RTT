@@ -740,7 +740,7 @@ html, body {
   border-color: var(--gold);
   transform: translateY(3px);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0.5);
-  filter: brightness(0.7);
+  background-color: var(--parchment);
   animation-play-state: paused;
 }
 
@@ -875,6 +875,14 @@ html, body {
 
 /* ---------- Thinking indicator ---------- */
 
+.thinking-dots {
+  display: flex;
+  gap: 6px;
+  font-size: 20px;
+  color: var(--parchment);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
 .thinking-dots span {
   animation: thinkingBlink 1.2s infinite;
 }
@@ -884,6 +892,43 @@ html, body {
 @keyframes thinkingBlink {
   0%, 80%, 100% { opacity: 0.2; }
   40% { opacity: 1; }
+}
+
+/* ---------- Choice grid cover (wood board) ---------- */
+
+.choice-grid-wrap {
+  position: relative;
+}
+
+/* A "wood board" that wipes down over the choice grid rather than
+   sliding in from outside — this element's own box never leaves the
+   wrap's bounds (no room above it to slide into, sandwiched between the
+   dialogue box and footer), so it's revealed top-to-bottom via
+   clip-path instead of moved into place via transform. */
+.choice-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 200ms ease-in-out;
+  pointer-events: none;
+  background-color: var(--wood-mid);
+  background-image:
+    repeating-linear-gradient(90deg, var(--wood-dark) 0px, var(--wood-dark) 3px, transparent 3px, transparent 44px),
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0px, rgba(0, 0, 0, 0.18) 1px, transparent 1px, transparent 5px),
+    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
+  border: 2px solid var(--frame-brown);
+  border-radius: 2px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 220, 160, 0.15);
+}
+
+.choice-cover.down {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 140ms cubic-bezier(0.6, 0, 1, 1);
+  pointer-events: auto;
 }
 
 /* ---------- Inventory ---------- */
@@ -996,16 +1041,79 @@ html, body {
   gap: 12px;
 }
 
-.inventory-back {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-  border: 2px solid var(--frame-brown);
-  border-radius: 4px;
-  background: var(--wood-mid);
-  color: var(--parchment);
-  font-size: 14px;
+.back-bar {
+  position: relative;
+  overflow: hidden;
+  align-self: stretch;
+  margin: auto -16px -16px;
+  height: 40px;
+  border: none;
+  border-top: 2px solid var(--frame-brown);
+  padding: 0;
   cursor: pointer;
+  background-color: var(--wood-mid);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
+    linear-gradient(180deg, var(--wood-mid), var(--wood-dark) 85%);
+}
+
+.back-bar-chevrons {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  background-size: 28px 40px;
+  opacity: 0.9;
+}
+
+.back-bar-right .back-bar-chevrons {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M8 8 L20 20 L8 32' stroke='%23f5e6c8' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  animation: chevronScrollRight 900ms linear infinite;
+}
+
+.back-bar-left .back-bar-chevrons {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M20 8 L8 20 L20 32' stroke='%23f5e6c8' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  animation: chevronScrollLeft 900ms linear infinite;
+}
+
+@keyframes chevronScrollRight {
+  from { background-position-x: 0; }
+  to { background-position-x: 28px; }
+}
+
+@keyframes chevronScrollLeft {
+  from { background-position-x: 0; }
+  to { background-position-x: -28px; }
+}
+
+/* Shine sweep across the whole bar, same motion as .shiny-text */
+.back-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  background-size: 250% 100%;
+  animation: shineSweep 2.4s linear infinite;
+}
+
+.back-bar.pressed {
+  background-color: var(--parchment);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(120, 95, 55, 0.12) 0px, rgba(120, 95, 55, 0.12) 1px, transparent 1px, transparent 5px),
+    linear-gradient(180deg, var(--parchment), var(--paper) 85%);
+}
+
+.back-bar.pressed .back-bar-chevrons {
+  animation-play-state: paused;
+  opacity: 0.75;
+}
+
+.back-bar.pressed.back-bar-right .back-bar-chevrons {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M8 8 L20 20 L8 32' stroke='%232b1c10' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.back-bar.pressed.back-bar-left .back-bar-chevrons {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M20 8 L8 20 L20 32' stroke='%232b1c10' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 .inventory-title {
@@ -1041,11 +1149,6 @@ html, body {
   opacity: 0.6;
   font-size: 11px;
   font-style: italic;
-}
-
-.inventory-back-bottom {
-  align-self: center;
-  margin-top: auto;
 }
 
 .inventory-item-mystery {

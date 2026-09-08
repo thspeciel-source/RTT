@@ -1,4 +1,5 @@
 import React from 'react';
+import BackBar from './BackBar.jsx';
 
 export default function InventoryPage({ items, onClose }) {
   return (
@@ -18,9 +19,7 @@ export default function InventoryPage({ items, onClose }) {
           ))
         )}
       </div>
-      <button type="button" className="inventory-back inventory-back-bottom" onClick={onClose} aria-label="Close inventory">
-        ▶
-      </button>
+      <BackBar direction="right" onClick={onClose} label="Close inventory" />
     </div>
   );
 }

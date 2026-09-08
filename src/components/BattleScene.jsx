@@ -48,8 +48,17 @@ export default function BattleScene({
           speed={dialogueSpeed}
           onFinished={onDialogueFinished}
         />
-        {showChoices && (
-          <ChoiceGrid options={options} disabled={choicesDisabled} onSelect={onSelectOption} />
+        {(showChoices || thinking) && (
+          <div className="choice-grid-wrap">
+            <ChoiceGrid options={options} disabled={choicesDisabled || thinking} onSelect={onSelectOption} />
+            <div className={`choice-cover${thinking ? ' down' : ''}`}>
+              <div className="thinking-dots">
+                <span>●</span>
+                <span>●</span>
+                <span>●</span>
+              </div>
+            </div>
+          </div>
         )}
         <div className="footer-banner" />
       </div>

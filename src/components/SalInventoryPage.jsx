@@ -1,4 +1,5 @@
 import React from 'react';
+import BackBar from './BackBar.jsx';
 
 export default function SalInventoryPage({ knownItems, secretItems, revealedItems, onClose }) {
   return (
@@ -23,9 +24,7 @@ export default function SalInventoryPage({ knownItems, secretItems, revealedItem
           );
         })}
       </div>
-      <button type="button" className="inventory-back inventory-back-bottom" onClick={onClose} aria-label="Close inventory">
-        ◀
-      </button>
+      <BackBar direction="left" onClick={onClose} label="Close inventory" />
     </div>
   );
 }
