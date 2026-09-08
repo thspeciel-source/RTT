@@ -1,0 +1,30 @@
+{
+  "asset_id": "dusty_sal_body",
+  "category": "npc_body_base",
+  "dimensions": { "width": 24, "height": 40 },
+  "palette_categories": ["skin", "hair", "cloth_vest", "cloth_shirt", "cloth_pants", "leather", "ui"],
+  "visual_description": "Dusty Sal, a gruff but fair saloon owner. Stocky build, dark flat-brimmed hat, brown vest over a tan shirt, tan trousers, dark worn boots. Front-facing standing idle pose.",
+  "silhouette_description": "Wide hat brim at the top, round head, boxy torso wider than the head, two short legs. Arms are a SEPARATE layer (see arm_*.json specs) — this body layer should have short shoulder stubs only, no full arms, so arm layers attach cleanly at the same shoulder position.",
+  "required_components": ["hat", "head_neck_no_face", "vest_torso", "legs", "boots", "shoulder_stubs"],
+  "generation_prompt": {
+    "subject": "middle-aged stocky saloon-keeper character, gruff expression implied by posture (do NOT render facial features — face is added separately)",
+    "composition": "full-body, centered, front-facing, standing idle pose, isolated on plain/transparent background",
+    "silhouette": "wide-brimmed dark hat, broad shoulders, boxy vest torso, sturdy legs, worn boots",
+    "clothing": "dark brown flat-topped hat, brown leather vest over tan shirt, tan trousers, dark leather boots",
+    "lighting": "soft light from upper-left, flat/stylized shading, no harsh photorealistic shadows",
+    "visual_language": "stylized low-poly-adjacent game character concept, clean simple shapes, strong readable silhouette, NOT photorealistic",
+    "requirements": "isolated subject, plain or transparent background, no text, no watermark, no face detail (blank/featureless head), no full arms (shoulder stubs only)"
+  },
+  "negative_prompt": "text, watermark, logo, photorealistic, extra limbs, malformed hands, multiple characters, background clutter, detailed face, gradients, blurry edges, duplicate objects",
+  "source_reference": "assets/_legacy/sprites/body_dusty_sal.png (procedurally hand-authored placeholder this asset replaces)",
+  "processing_settings": {
+    "width": 24,
+    "height": 40,
+    "categories": ["skin", "hair", "cloth_vest", "cloth_shirt", "cloth_pants", "leather", "ui"],
+    "shading": "off",
+    "outline": "off"
+  },
+  "version": 0,
+  "status": "pending_concept",
+  "notes": "Status becomes 'generated' once a concept image lands in assets/_incoming/dusty_sal_body/source.png and tools/pixel-art/process.py has produced an assets/generated/ candidate; 'approved' once a human picks a version to promote into assets/approved/ and then src/assets/sprites/."
+}
