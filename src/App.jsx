@@ -289,7 +289,7 @@ export default function App() {
               <div className="panel-seam panel-seam-left" />
               <div className="panel-seam panel-seam-right" />
             </div>
-            {openPanel === 'none' && (
+            {openPanel === 'none' && !endOutcome && (
               <>
                 <InventoryButton onClick={() => setOpenPanel('player')} />
                 <InventoryButton

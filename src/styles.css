@@ -251,7 +251,7 @@ html, body {
   right: 0;
   bottom: 0;
   height: 33.34%;
-  background-image: url('./assets/ui/dirt_texture.png');
+  background-image: url('./assets/ui/sand_texture.png');
   background-repeat: repeat;
   background-size: 20px 20px;
   image-rendering: pixelated;
@@ -1074,55 +1074,63 @@ html, body {
   position: relative;
   overflow: hidden;
   align-self: stretch;
-  margin: auto -16px -16px;
-  height: 40px;
-  border: none;
-  border-top: 2px solid var(--frame-brown);
+  margin: auto 10px 16px;
+  height: 30px;
+  border: 2px solid var(--frame-brown);
+  border-radius: 6px;
   padding: 0;
   cursor: pointer;
   background-color: var(--wood-mid);
   background-image:
     repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
     linear-gradient(180deg, var(--wood-mid), var(--wood-dark) 85%);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
 }
 
 .back-bar-chevrons {
   position: absolute;
   inset: 0;
   background-repeat: repeat-x;
-  background-size: 28px 40px;
-  opacity: 0.9;
+  background-position: center;
+  background-size: 16px 16px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  opacity: 0.75;
 }
 
+/* Small blocky 3-step chevrons (axis-aligned rects, no anti-aliased
+   diagonal strokes) so they read as pixel art rather than smooth vector
+   arrows. */
 .back-bar-right .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M8 8 L20 20 L8 32' stroke='%23f5e6c8' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  animation: chevronScrollRight 900ms linear infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='5' y='4' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='8' y='7' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='5' y='10' width='3' height='3' fill='%23f5e6c8'/%3E%3C/svg%3E");
+  animation: chevronScrollRight 1400ms steps(4) infinite;
 }
 
 .back-bar-left .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M20 8 L8 20 L20 32' stroke='%23f5e6c8' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  animation: chevronScrollLeft 900ms linear infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='8' y='4' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='5' y='7' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='8' y='10' width='3' height='3' fill='%23f5e6c8'/%3E%3C/svg%3E");
+  animation: chevronScrollLeft 1400ms steps(4) infinite;
 }
 
 @keyframes chevronScrollRight {
   from { background-position-x: 0; }
-  to { background-position-x: 28px; }
+  to { background-position-x: 16px; }
 }
 
 @keyframes chevronScrollLeft {
   from { background-position-x: 0; }
-  to { background-position-x: -28px; }
+  to { background-position-x: -16px; }
 }
 
-/* Shine sweep across the whole bar, same motion as .shiny-text */
+/* Shine sweep across the whole bar, same motion as .shiny-text, dimmed
+   down so it's a subtle glint rather than a bright flash. */
 .back-bar::after {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.55) 50%, transparent 65%);
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.2) 50%, transparent 65%);
   background-size: 250% 100%;
-  animation: shineSweep 2.4s linear infinite;
+  animation: shineSweep 3.4s linear infinite;
 }
 
 .back-bar.pressed {
@@ -1134,15 +1142,15 @@ html, body {
 
 .back-bar.pressed .back-bar-chevrons {
   animation-play-state: paused;
-  opacity: 0.75;
+  opacity: 0.65;
 }
 
 .back-bar.pressed.back-bar-right .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M8 8 L20 20 L8 32' stroke='%232b1c10' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='5' y='4' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='8' y='7' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='5' y='10' width='3' height='3' fill='%232b1c10'/%3E%3C/svg%3E");
 }
 
 .back-bar.pressed.back-bar-left .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='40'%3E%3Cpath d='M20 8 L8 20 L20 32' stroke='%232b1c10' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='8' y='4' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='5' y='7' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='8' y='10' width='3' height='3' fill='%232b1c10'/%3E%3C/svg%3E");
 }
 
 .inventory-title {
