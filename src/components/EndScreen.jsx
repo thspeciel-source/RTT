@@ -24,7 +24,7 @@ export default function EndScreen({ outcome, summary, wonItemName, onRestart }) 
           <img className="prize-icon" src={PRIZE_ICON} alt="" />
         </div>
       )}
-      {!isFailure && wonItemName && <div className="prize-name shiny-text-dark">{wonItemName}</div>}
+      {!isFailure && wonItemName && <div className="prize-name">{wonItemName}</div>}
       <div className="end-screen-subtitle">
         {isFailure ? "They won't be coming back." : summary}
       </div>
