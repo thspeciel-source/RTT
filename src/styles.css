@@ -997,7 +997,6 @@ html, body {
   width: 300%;
   height: 100%;
   transform: translateX(-33.3334%);
-  transition: transform 400ms ease;
 }
 
 .slide-container.open-player {
@@ -1050,49 +1049,6 @@ html, body {
   height: 30px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-}
-
-/* ---------- Panel seam divider ---------- */
-
-/* A wide band of six alternating brown/beige pixel-block zigzag "threads" —
-   built from plain <rect> tiles (shape-rendering: crispEdges, no curves)
-   so it reads as chunky pixel art rather than a smooth vector squiggle.
-   Hidden by default; App.jsx only adds .active for the ~400ms the slide
-   transition into an inventory page is actually running. */
-.panel-seam {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 80px;
-  transform: translateX(-50%);
-  z-index: 900;
-  pointer-events: none;
-  background-repeat: repeat-y;
-  background-position: 0 0;
-  background-size: 80px 24px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='24' shape-rendering='crispEdges'%3E%3Crect x='1' y='-1' width='8' height='8' fill='%23241408'/%3E%3Crect x='2' y='0' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='11' y='5' width='8' height='8' fill='%23241408'/%3E%3Crect x='12' y='6' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='1' y='11' width='8' height='8' fill='%23241408'/%3E%3Crect x='2' y='12' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='11' y='17' width='8' height='8' fill='%23241408'/%3E%3Crect x='12' y='18' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='13' y='-1' width='8' height='8' fill='%23241408'/%3E%3Crect x='14' y='0' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='23' y='5' width='8' height='8' fill='%23241408'/%3E%3Crect x='24' y='6' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='13' y='11' width='8' height='8' fill='%23241408'/%3E%3Crect x='14' y='12' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='23' y='17' width='8' height='8' fill='%23241408'/%3E%3Crect x='24' y='18' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='25' y='-1' width='8' height='8' fill='%23241408'/%3E%3Crect x='26' y='0' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='35' y='5' width='8' height='8' fill='%23241408'/%3E%3Crect x='36' y='6' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='25' y='11' width='8' height='8' fill='%23241408'/%3E%3Crect x='26' y='12' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='35' y='17' width='8' height='8' fill='%23241408'/%3E%3Crect x='36' y='18' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='37' y='-1' width='8' height='8' fill='%23241408'/%3E%3Crect x='38' y='0' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='47' y='5' width='8' height='8' fill='%23241408'/%3E%3Crect x='48' y='6' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='37' y='11' width='8' height='8' fill='%23241408'/%3E%3Crect x='38' y='12' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='47' y='17' width='8' height='8' fill='%23241408'/%3E%3Crect x='48' y='18' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='49' y='-1' width='8' height='8' fill='%23241408'/%3E%3Crect x='50' y='0' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='59' y='5' width='8' height='8' fill='%23241408'/%3E%3Crect x='60' y='6' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='49' y='11' width='8' height='8' fill='%23241408'/%3E%3Crect x='50' y='12' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='59' y='17' width='8' height='8' fill='%23241408'/%3E%3Crect x='60' y='18' width='6' height='6' fill='%23f5e6c8'/%3E%3Crect x='61' y='-1' width='8' height='8' fill='%23241408'/%3E%3Crect x='62' y='0' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='71' y='5' width='8' height='8' fill='%23241408'/%3E%3Crect x='72' y='6' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='61' y='11' width='8' height='8' fill='%23241408'/%3E%3Crect x='62' y='12' width='6' height='6' fill='%23a67c52'/%3E%3Crect x='71' y='17' width='8' height='8' fill='%23241408'/%3E%3Crect x='72' y='18' width='6' height='6' fill='%23a67c52'/%3E%3C/svg%3E");
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  animation: seamFlow 1.4s linear infinite;
-  opacity: 0;
-  transition: opacity 80ms linear;
-}
-
-.panel-seam.active {
-  opacity: 1;
-}
-
-.panel-seam-left {
-  left: 33.3334%;
-}
-
-.panel-seam-right {
-  left: 66.6667%;
-}
-
-@keyframes seamFlow {
-  from { background-position-y: 0; }
-  to { background-position-y: 28px; }
 }
 
 .inventory-page {

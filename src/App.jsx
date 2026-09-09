@@ -39,12 +39,10 @@ export default function App() {
   const [endSummary, setEndSummary] = useState('');
   const [wonItemName, setWonItemName] = useState('');
   const [openPanel, setOpenPanel] = useState('none'); // 'none' | 'player' | 'sal'
-  const [invTransitioning, setInvTransitioning] = useState(false);
   const [playerItems, setPlayerItems] = useState(itemsData.player);
   const [npcItems, setNpcItems] = useState(NPC.inventory);
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
-  const invTransitionTimeoutRef = useRef(null);
   const pendingOutcomeRef = useRef(null);
   const lastTradeRef = useRef(null);
   const inquiryCountRef = useRef(0);
@@ -271,16 +269,6 @@ export default function App() {
     }
   }
 
-  // The seam squiggle should only flash across the screen while actually
-  // sliding into an inventory page — flip it on right as the slide starts,
-  // then back off once the 400ms CSS slide transition has finished.
-  function openInventoryPanel(panel) {
-    setOpenPanel(panel);
-    setInvTransitioning(true);
-    clearTimeout(invTransitionTimeoutRef.current);
-    invTransitionTimeoutRef.current = setTimeout(() => setInvTransitioning(false), 400);
-  }
-
   function handleOpenTradeModal() {
     setTradeModalOpen(true);
   }
@@ -385,12 +373,10 @@ export default function App() {
                   onClose={() => setOpenPanel('none')}
                 />
               </div>
-              <div className={`panel-seam panel-seam-left${invTransitioning ? ' active' : ''}`} />
-              <div className={`panel-seam panel-seam-right${invTransitioning ? ' active' : ''}`} />
             </div>
             {openPanel === 'none' && !endOutcome && !tradeModalOpen && (
               <>
-                <InventoryButton onClick={() => openInventoryPanel('player')} />
+                <InventoryButton onClick={() => setOpenPanel('player')} />
                 {mode === 'llm' && (
                   <InventoryButton
                     onClick={handleOpenTradeModal}
@@ -400,7 +386,7 @@ export default function App() {
                   />
                 )}
                 <InventoryButton
-                  onClick={() => openInventoryPanel('sal')}
+                  onClick={() => setOpenPanel('sal')}
                   icon={STRONGBOX_ICON}
                   className="sal-inventory-button"
                   label="Open Sal's goods"
