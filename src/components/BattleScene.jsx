@@ -22,6 +22,7 @@ export default function BattleScene({
   crashed,
   endOutcome,
   endSummary,
+  wonItemName,
   onRestart,
   tradeModalOpen,
   onCloseTradeModal,
@@ -58,9 +59,9 @@ export default function BattleScene({
             <ChoiceGrid options={options} disabled={choicesDisabled || thinking} onSelect={onSelectOption} />
             <div className={`choice-cover${thinking ? ' down' : ''}`}>
               <div className="thinking-dots">
-                <span>●</span>
-                <span>●</span>
-                <span>●</span>
+                <span />
+                <span />
+                <span />
               </div>
             </div>
           </div>
@@ -75,7 +76,7 @@ export default function BattleScene({
           onPropose={onProposeTrade}
         />
       )}
-      <EndScreen outcome={endOutcome} summary={endSummary} onRestart={onRestart} />
+      <EndScreen outcome={endOutcome} summary={endSummary} wonItemName={wonItemName} onRestart={onRestart} />
     </div>
   );
 }

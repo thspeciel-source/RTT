@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { PRIZE_ICON, SUNBURST_ICON } from '../systems/sprite-assets.js';
 
-export default function EndScreen({ outcome, summary, onRestart }) {
+export default function EndScreen({ outcome, summary, wonItemName, onRestart }) {
   const [canRestart, setCanRestart] = useState(false);
 
   useEffect(() => {
@@ -9,48 +10,31 @@ export default function EndScreen({ outcome, summary, onRestart }) {
     return () => clearTimeout(t);
   }, [outcome]);
 
-  const sparkles = useMemo(
-    () =>
-      Array.from({ length: 10 }, (_, i) => ({
-        id: i,
-        left: Math.round(Math.random() * 100),
-        top: Math.round(Math.random() * 100),
-        delay: (Math.random() * 1.2).toFixed(2)
-      })),
-    [outcome]
-  );
-
   if (!outcome) return null;
   const isFailure = outcome === 'hostile_end';
 
   return (
     <div className="end-screen">
-      {!isFailure && (
-        <div className="sparkle-field">
-          {sparkles.map((s) => (
-            <span
-              key={s.id}
-              className="sparkle-dot"
-              style={{ left: `${s.left}%`, top: `${s.top}%`, animationDelay: `${s.delay}s` }}
-            >
-              ✱
-            </span>
-          ))}
-        </div>
-      )}
       <div className={`end-screen-title ${isFailure ? 'failed' : 'success shiny-text'}`}>
         {isFailure ? 'DEAL FAILED' : 'DEAL MADE'}
       </div>
+      {!isFailure && (
+        <div className="prize-reveal">
+          <img className="prize-sunburst" src={SUNBURST_ICON} alt="" />
+          <img className="prize-icon" src={PRIZE_ICON} alt="" />
+        </div>
+      )}
+      {!isFailure && wonItemName && <div className="prize-name shiny-text-dark">{wonItemName}</div>}
       <div className="end-screen-subtitle">
         {isFailure ? "They won't be coming back." : summary}
       </div>
       <button
         type="button"
         className="end-screen-button"
-        style={{ animationPlayState: canRestart ? 'running' : 'paused', pointerEvents: canRestart ? 'auto' : 'none' }}
+        style={{ pointerEvents: canRestart ? 'auto' : 'none' }}
         onClick={onRestart}
       >
-        {isFailure ? 'Try Again' : 'Play Again'}
+        {isFailure ? 'Try Again' : 'Continue'}
       </button>
     </div>
   );

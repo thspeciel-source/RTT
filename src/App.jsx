@@ -37,6 +37,7 @@ export default function App() {
   const [crashed, setCrashed] = useState(false);
   const [endOutcome, setEndOutcome] = useState(null);
   const [endSummary, setEndSummary] = useState('');
+  const [wonItemName, setWonItemName] = useState('');
   const [openPanel, setOpenPanel] = useState('none'); // 'none' | 'player' | 'sal'
   const [playerItems, setPlayerItems] = useState(itemsData.player);
   const [npcItems, setNpcItems] = useState(NPC.inventory);
@@ -186,12 +187,14 @@ export default function App() {
       if (trade) {
         const offerNames = trade.offerItems.map((i) => i.name).join(' and ');
         setEndSummary(`You handed over the ${offerNames} and walked away with the ${trade.requestItem.name}.`);
+        setWonItemName(trade.requestItem.name);
       } else {
         setEndSummary(
           `You handed over the ${playerItems[0]?.name || 'your item'} and walked away with the ${
             npcItems[0]?.name || 'their item'
           }.`
         );
+        setWonItemName(npcItems[0]?.name || '');
       }
       setEndOutcome('accepted');
       setPhase('ended');
@@ -299,6 +302,7 @@ export default function App() {
   function handleRestart() {
     setEndOutcome(null);
     setEndSummary('');
+    setWonItemName('');
     setCrashed(false);
     setScreenShake(false);
     setPlayerItems(itemsData.player);
@@ -354,6 +358,7 @@ export default function App() {
                   crashed={crashed}
                   endOutcome={endOutcome}
                   endSummary={endSummary}
+                  wonItemName={wonItemName}
                   onRestart={handleRestart}
                   tradeModalOpen={tradeModalOpen}
                   onCloseTradeModal={handleCloseTradeModal}
