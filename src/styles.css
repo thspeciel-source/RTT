@@ -1056,16 +1056,17 @@ html, body {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 14px;
+  width: 22px;
   transform: translateX(-50%);
   z-index: 900;
   pointer-events: none;
   background-repeat: repeat-y;
   background-position: 0 0;
-  background-size: 14px 28px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='28'%3E%3Cpath d='M7 -2 Q1 5 7 14 Q13 23 7 30' stroke='%23c9a227' stroke-width='2.5' fill='none'/%3E%3C/svg%3E");
+  background-size: 22px 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='28'%3E%3Cpath d='M11 -2 Q1 5 11 14 Q21 23 11 30' stroke='%23241408' stroke-width='7' fill='none' stroke-linecap='round'/%3E%3Cpath d='M11 -2 Q1 5 11 14 Q21 23 11 30' stroke='%23ffd700' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.6));
   animation: seamFlow 1.4s linear infinite;
-  opacity: 0.85;
+  opacity: 1;
 }
 
 .panel-seam-left {
