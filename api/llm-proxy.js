@@ -66,10 +66,10 @@ export default async function handler(req, res) {
     return;
   }
 
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
   const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
   if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
-    res.status(500).json({ error: 'No LLM API key configured on the server (GEMINI_API_KEY or ANTHROPIC_API_KEY).' });
+    res.status(500).json({ error: 'No LLM API key configured on the server (GEMINI_API_KEY, GEMINI_KEY, or ANTHROPIC_API_KEY).' });
     return;
   }
 

@@ -5,7 +5,7 @@ import cors from 'cors';
 const PORT = process.env.PORT || 3001;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite';
 
 const app = express();
@@ -73,7 +73,7 @@ async function callAnthropic({ model, max_tokens, system, messages }) {
 
 app.post('/api/llm-proxy', async (req, res) => {
   if (!GEMINI_API_KEY && !ANTHROPIC_API_KEY) {
-    return res.status(500).json({ error: 'No LLM API key configured on the server (GEMINI_API_KEY or ANTHROPIC_API_KEY).' });
+    return res.status(500).json({ error: 'No LLM API key configured on the server (GEMINI_API_KEY, GEMINI_KEY, or ANTHROPIC_API_KEY).' });
   }
 
   const { model, max_tokens, system, messages } = req.body || {};
