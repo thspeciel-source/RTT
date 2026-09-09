@@ -20,6 +20,7 @@ export default function BattleScene({
   thinking,
   screenShake,
   crashed,
+  memory,
   endOutcome,
   endSummary,
   wonItemName,
@@ -46,6 +47,12 @@ export default function BattleScene({
     <div className={`battle-scene${screenShake ? ' screen-shake' : ''}`} onClickCapture={handleSceneClickCapture}>
       <StageArea mood={mood} patience={patience} npc={npc} crashed={crashed} />
       <div className="bottom-panel">
+        {memory && (
+          <div className="memory-box">
+            <span className="memory-box-label">ON HIS MIND</span>
+            <span className="memory-box-text">{memory}</span>
+          </div>
+        )}
         <DialogueBox
           key={dialogueText}
           ref={dialogueRef}

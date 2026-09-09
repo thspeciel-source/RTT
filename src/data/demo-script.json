@@ -9,6 +9,7 @@
       "mood": { "valence": 0.0, "arousal": 0.3 },
       "patience": 1.0,
       "trade_state": "none",
+      "memory": "Just getting acquainted.",
       "player_options": [
         { "label": "Introduce", "strategy": "friendly", "text": "Just here to talk business, Sal. Nothing more." },
         { "label": "Size him up", "strategy": "shrewd", "text": "I hear you've got something worth my while." },
@@ -25,6 +26,7 @@
       "mood": { "valence": 0.15, "arousal": 0.35 },
       "patience": 0.82,
       "trade_state": "none",
+      "memory": "Waiting to hear what he's actually offering.",
       "player_options": [
         { "label": "Show watch", "strategy": "friendly", "text": "This pocket watch. Family heirloom, runs like new." },
         { "label": "Lowball", "strategy": "shrewd", "text": "Depends what you're willing to give up first." },
@@ -41,6 +43,7 @@
       "mood": { "valence": -0.2, "arousal": 0.5 },
       "patience": 0.52,
       "trade_state": "none",
+      "memory": "He offered a pocket watch — not impressed, wants the six-shooter left alone.",
       "player_options": [
         { "label": "Reassure", "strategy": "friendly", "text": "It's worth more than it looks, I promise you that." },
         { "label": "Sweeten", "strategy": "shrewd", "text": "I'll throw in something extra if that six-shooter's on the table." },
@@ -57,6 +60,7 @@
       "mood": { "valence": -0.45, "arousal": 0.75 },
       "patience": 0.22,
       "trade_state": "offered",
+      "memory": "He's pushing hard for the six-shooter, still only offering the watch.",
       "player_options": [
         { "label": "Apologize", "strategy": "friendly", "text": "Fair enough. Let's find terms we can both live with." },
         { "label": "Final offer", "strategy": "shrewd", "text": "Watch, plus a favor owed. That's my final word." },
@@ -75,6 +79,7 @@
     "patience": 0.5,
     "trade_state": "accepted",
     "trade_result": { "player_gives": ["pocket_watch"], "player_receives": ["six_shooter"] },
+    "memory": "Deal struck: watch for the six-shooter.",
     "player_options": []
   },
   "endingHostile": {
@@ -86,6 +91,7 @@
     "mood": { "valence": -1.0, "arousal": 0.95 },
     "patience": 0.0,
     "trade_state": "hostile_end",
+    "memory": "Negotiation collapsed — he's done talking.",
     "player_options": []
   }
 }

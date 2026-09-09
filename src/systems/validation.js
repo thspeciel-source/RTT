@@ -24,14 +24,15 @@ export function clamp(val, min, max) {
 }
 
 const OPTION_TEXT_LIMIT = 60;
+const MEMORY_TEXT_LIMIT = 80;
 
-// Backstop for the "max 60 chars" prompt rule — the button this fills is a
-// fixed size no matter what, so an LLM that ignores the limit gets clipped
-// here rather than ever pushing the layout around.
-function truncateText(text) {
+// Backstop for the "max N chars" prompt rules — some of this fills a
+// fixed-size button, some a small status strip, but either way an LLM that
+// ignores the limit gets clipped here rather than pushing the layout around.
+function truncateText(text, limit = OPTION_TEXT_LIMIT) {
   const str = String(text);
-  if (str.length <= OPTION_TEXT_LIMIT) return str;
-  return `${str.slice(0, OPTION_TEXT_LIMIT - 1).trimEnd()}…`;
+  if (str.length <= limit) return str;
+  return `${str.slice(0, limit - 1).trimEnd()}…`;
 }
 
 // Player options always occupy the same position for the same approach —
@@ -86,6 +87,7 @@ export function getDefaultResponse() {
     trade_state: 'none',
     revealed_item: null,
     trade_result: { player_gives: [], player_receives: [] },
+    memory: 'Just getting acquainted.',
     player_options: getDefaultOptions()
   };
 }
@@ -119,6 +121,11 @@ function validateCore(data) {
   data.revealed_item = typeof data.revealed_item === 'string' && data.revealed_item.trim() ? data.revealed_item : null;
 
   data.trade_result = data.trade_state === 'accepted' ? validateTradeResult(data.trade_result) : { player_gives: [], player_receives: [] };
+
+  data.memory =
+    typeof data.memory === 'string' && data.memory.trim()
+      ? truncateText(data.memory.trim(), MEMORY_TEXT_LIMIT)
+      : 'Just getting acquainted.';
 
   if (!data.npc_dialogue || typeof data.npc_dialogue !== 'string') {
     data.npc_dialogue = '...';

@@ -353,6 +353,7 @@ export default function App() {
                   thinking={thinking}
                   screenShake={screenShake}
                   crashed={crashed}
+                  memory={current.memory}
                   endOutcome={endOutcome}
                   endSummary={endSummary}
                   wonItemName={wonItemName}

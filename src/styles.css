@@ -592,6 +592,36 @@ html, body {
 .anim-jump { animation: jump 400ms ease-out; }
 .anim-tremble { animation: tremble 220ms ease-in-out infinite; }
 
+/* ---------- NPC memory box ---------- */
+
+.memory-box {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  background: var(--wood-mid);
+  border: 2px solid var(--frame-brown);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+  font-size: 9px;
+  overflow: hidden;
+}
+
+.memory-box-label {
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+.memory-box-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--parchment);
+  opacity: 0.85;
+}
+
 /* ---------- Dialogue Box ---------- */
 
 .dialogue-box {
