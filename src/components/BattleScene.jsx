@@ -3,6 +3,7 @@ import StageArea from './StageArea.jsx';
 import DialogueBox from './DialogueBox.jsx';
 import ChoiceGrid from './ChoiceGrid.jsx';
 import EndScreen from './EndScreen.jsx';
+import TradeProposalModal from './TradeProposalModal.jsx';
 
 export default function BattleScene({
   npcName,
@@ -22,7 +23,16 @@ export default function BattleScene({
   crashed,
   endOutcome,
   endSummary,
-  onRestart
+  onRestart,
+  showActions,
+  actionsDisabled,
+  tradeModalOpen,
+  onOpenTradeModal,
+  onCloseTradeModal,
+  onProposeTrade,
+  onInquireGoods,
+  playerItems,
+  npcItems
 }) {
   const dialogueRef = useRef(null);
 
@@ -60,8 +70,37 @@ export default function BattleScene({
             </div>
           </div>
         )}
-        <div className="footer-banner" />
+        <div className="footer-banner">
+          {showActions && (
+            <div className="footer-actions">
+              <button
+                type="button"
+                className="footer-action-btn"
+                disabled={actionsDisabled}
+                onClick={onOpenTradeModal}
+              >
+                Propose Trade
+              </button>
+              <button
+                type="button"
+                className="footer-action-btn"
+                disabled={actionsDisabled}
+                onClick={onInquireGoods}
+              >
+                Ask About His Goods
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+      {tradeModalOpen && (
+        <TradeProposalModal
+          playerItems={playerItems}
+          npcItems={npcItems}
+          onCancel={onCloseTradeModal}
+          onPropose={onProposeTrade}
+        />
+      )}
       <EndScreen outcome={endOutcome} summary={endSummary} onRestart={onRestart} />
     </div>
   );

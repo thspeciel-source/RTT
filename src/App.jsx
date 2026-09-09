@@ -12,7 +12,6 @@ import { createPreloadCache } from './systems/preloader.js';
 import { STRONGBOX_ICON } from './systems/sprite-assets.js';
 
 const NPC = npcsData.dusty_sal;
-const PLAYER_INVENTORY = itemsData.player;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,6 +19,12 @@ function sleep(ms) {
 
 function toDisplay(resp) {
   return { face: resp.face, arms: resp.arms, bubble: resp.bubble, body_anim: resp.body_anim };
+}
+
+function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
 export default function App() {
@@ -34,13 +39,21 @@ export default function App() {
   const [endOutcome, setEndOutcome] = useState(null);
   const [endSummary, setEndSummary] = useState('');
   const [openPanel, setOpenPanel] = useState('none'); // 'none' | 'player' | 'sal'
-  const [revealedItems, setRevealedItems] = useState([]);
+  const [playerItems, setPlayerItems] = useState(itemsData.player);
+  const [npcItems, setNpcItems] = useState(NPC.inventory);
+  const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
   const pendingOutcomeRef = useRef(null);
+  const pendingTradeRef = useRef(null);
+  const lastTradeRef = useRef(null);
+  const inquiryCountRef = useRef(0);
   const turnIndexRef = useRef(0);
   const historyRef = useRef([]);
   const systemPromptRef = useRef('');
   const preloadCache = useRef(createPreloadCache()).current;
+
+  const mysteryCount =
+    (NPC.secret_inventory || []).filter((s) => !npcItems.some((i) => i.id === s.id)).length;
 
   useEffect(() => {
     let cancelled = false;
@@ -88,7 +101,7 @@ export default function App() {
   async function bootLLM() {
     setPhase('thinking');
     setThinkingDisplay();
-    systemPromptRef.current = buildSystemPrompt(NPC, PLAYER_INVENTORY);
+    systemPromptRef.current = buildSystemPrompt(NPC, playerItems);
     historyRef.current = [];
     try {
       const resp = await getNPCResponse(
@@ -115,12 +128,32 @@ export default function App() {
 
   function applyDisplayOnly(resp) {
     if (resp.trade_state === 'hostile_end') {
+      pendingTradeRef.current = null;
       runCrashIntro(resp);
       return;
     }
-    if (resp.revealed_item && NPC.secret_inventory?.includes(resp.revealed_item)) {
-      setRevealedItems((prev) => (prev.includes(resp.revealed_item) ? prev : [...prev, resp.revealed_item]));
+
+    if (resp.revealed_item) {
+      const secret = NPC.secret_inventory?.find((s) => s.name === resp.revealed_item);
+      if (secret) {
+        setNpcItems((prev) => (prev.some((i) => i.id === secret.id) ? prev : [...prev, secret]));
+      }
     }
+
+    // If this response is answering a structured trade proposal we sent,
+    // an "accepted" trade_state means the goods genuinely change hands —
+    // pull the offered item(s) out of the player's bag and into Sal's,
+    // and vice versa for the requested item.
+    const trade = pendingTradeRef.current;
+    pendingTradeRef.current = null;
+    lastTradeRef.current = null;
+    if (resp.trade_state === 'accepted' && trade) {
+      const offerIds = trade.offerItems.map((i) => i.id);
+      setPlayerItems((prev) => prev.filter((i) => !offerIds.includes(i.id)).concat([trade.requestItem]));
+      setNpcItems((prev) => prev.filter((i) => i.id !== trade.requestItem.id).concat(trade.offerItems));
+      lastTradeRef.current = trade;
+    }
+
     setNpcDisplay(toDisplay(resp));
     setCurrent(resp);
     setDialogueSpeed(20);
@@ -152,13 +185,43 @@ export default function App() {
       setEndOutcome('hostile_end');
       setPhase('ended');
     } else if (outcome === 'accepted') {
-      setEndSummary(
-        `You handed over the ${PLAYER_INVENTORY[0]} and walked away with the ${NPC.inventory[0]}.`
-      );
+      const trade = lastTradeRef.current;
+      if (trade) {
+        const offerNames = trade.offerItems.map((i) => i.name).join(' and ');
+        setEndSummary(`You handed over the ${offerNames} and walked away with the ${trade.requestItem.name}.`);
+      } else {
+        setEndSummary(
+          `You handed over the ${playerItems[0]?.name || 'your item'} and walked away with the ${
+            npcItems[0]?.name || 'their item'
+          }.`
+        );
+      }
       setEndOutcome('accepted');
       setPhase('ended');
     } else {
       setPhase('choices');
+    }
+  }
+
+  // Shared by any player action that isn't one of the 4 pre-baked
+  // options (a trade proposal, an inquiry) — these never have a cached
+  // pre_response, so it's always a fresh call.
+  async function sendFreshMessage(text) {
+    setPhase('thinking');
+    setThinkingDisplay();
+    const historyBeforeThisTurn = [...historyRef.current];
+    try {
+      const fresh = await getNPCResponse(systemPromptRef.current, historyBeforeThisTurn, text);
+      historyRef.current.push(
+        { role: 'user', content: text },
+        { role: 'assistant', content: JSON.stringify(stripPreResponses(fresh)) }
+      );
+      preloadCache.set(fresh.pre_responses);
+      applyDisplayOnly(fresh);
+    } catch (e) {
+      console.error('LLM call failed, using safe default', e);
+      pendingTradeRef.current = null;
+      applyDisplayOnly(getDefaultResponse());
     }
   }
 
@@ -204,21 +267,36 @@ export default function App() {
         })
         .catch((e) => console.error('Background prefetch failed', e));
     } else {
-      setPhase('thinking');
-      setThinkingDisplay();
-      try {
-        const fresh = await getNPCResponse(systemPromptRef.current, historyBeforeThisTurn, chosenOption.text);
-        historyRef.current.push(
-          { role: 'user', content: chosenOption.text },
-          { role: 'assistant', content: JSON.stringify(stripPreResponses(fresh)) }
-        );
-        preloadCache.set(fresh.pre_responses);
-        applyDisplayOnly(fresh);
-      } catch (e) {
-        console.error('LLM call failed, using safe default', e);
-        applyDisplayOnly(getDefaultResponse());
-      }
+      await sendFreshMessage(chosenOption.text);
     }
+  }
+
+  function handleOpenTradeModal() {
+    setTradeModalOpen(true);
+  }
+
+  function handleCloseTradeModal() {
+    setTradeModalOpen(false);
+  }
+
+  async function handleProposeTrade(proposal) {
+    setTradeModalOpen(false);
+    if (mode !== 'llm' || (phase !== 'choices' && phase !== 'dialogue')) return;
+    pendingTradeRef.current = proposal;
+    const offerText = proposal.offerItems.map((i) => i.name).join(' and ');
+    const message = `[TRADE PROPOSAL | tone: ${proposal.strategy}] I'll give you ${offerText} for your ${proposal.requestItem.name}.`;
+    preloadCache.clear();
+    await sendFreshMessage(message);
+  }
+
+  async function handleInquireGoods() {
+    if (mode !== 'llm' || (phase !== 'choices' && phase !== 'dialogue')) return;
+    inquiryCountRef.current += 1;
+    const count = inquiryCountRef.current;
+    const repeatNote = count > 1 ? ` (This is the ${ordinal(count)} time the player has asked this.)` : '';
+    const message = `[INQUIRY] The player asks what else you might have worth trading, beyond what they've already seen.${repeatNote}`;
+    preloadCache.clear();
+    await sendFreshMessage(message);
   }
 
   function handleRestart() {
@@ -227,7 +305,13 @@ export default function App() {
     setRageOverlay(false);
     setCrashed(false);
     setScreenShake(false);
+    setPlayerItems(itemsData.player);
+    setNpcItems(NPC.inventory);
+    setTradeModalOpen(false);
     pendingOutcomeRef.current = null;
+    pendingTradeRef.current = null;
+    lastTradeRef.current = null;
+    inquiryCountRef.current = 0;
     preloadCache.clear();
     if (mode === 'demo') {
       bootDemo();
@@ -254,7 +338,7 @@ export default function App() {
               className={`slide-container${openPanel === 'player' ? ' open-player' : ''}${openPanel === 'sal' ? ' open-sal' : ''}`}
             >
               <div className="slide-panel">
-                <InventoryPage items={PLAYER_INVENTORY} onClose={() => setOpenPanel('none')} />
+                <InventoryPage items={playerItems} onClose={() => setOpenPanel('none')} />
               </div>
               <div className="slide-panel">
                 <BattleScene
@@ -276,13 +360,21 @@ export default function App() {
                   endOutcome={endOutcome}
                   endSummary={endSummary}
                   onRestart={handleRestart}
+                  showActions={mode === 'llm' && !endOutcome}
+                  actionsDisabled={thinking}
+                  tradeModalOpen={tradeModalOpen}
+                  onOpenTradeModal={handleOpenTradeModal}
+                  onCloseTradeModal={handleCloseTradeModal}
+                  onProposeTrade={handleProposeTrade}
+                  onInquireGoods={handleInquireGoods}
+                  playerItems={playerItems}
+                  npcItems={npcItems}
                 />
               </div>
               <div className="slide-panel">
                 <SalInventoryPage
-                  knownItems={NPC.inventory}
-                  secretItems={NPC.secret_inventory || []}
-                  revealedItems={revealedItems}
+                  knownItems={npcItems}
+                  mysteryCount={mysteryCount}
                   onClose={() => setOpenPanel('none')}
                 />
               </div>

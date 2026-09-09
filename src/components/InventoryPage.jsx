@@ -11,10 +11,10 @@ export default function InventoryPage({ items, onClose }) {
         {items.length === 0 ? (
           <div className="inventory-empty">Nothing but dust and regrets.</div>
         ) : (
-          items.map((item, i) => (
-            <div className="inventory-item" key={i}>
+          items.map((item) => (
+            <div className="inventory-item" key={item.id}>
               <span className="inventory-item-bullet">◆</span>
-              {item}
+              {item.name}
             </div>
           ))
         )}

@@ -6,13 +6,16 @@
     "backstory": "Sal has run the Last Chance Saloon for twenty years and buried two business partners who tried to cheat him. He respects boldness and honesty far more than flattery, and he can smell a con from across the room.",
     "goal": "get the best possible deal without giving up the saloon deed for less than it's worth",
     "initialMood": { "valence": 0.0, "arousal": 0.3 },
-    "inventory": ["Deed to the Saloon", "Bottle of Aged Whiskey"],
+    "inventory": [
+      { "id": "deed", "name": "Deed to the Saloon", "value": 10 },
+      { "id": "whiskey", "name": "Bottle of Aged Whiskey", "value": 3 }
+    ],
     "secret_inventory": [
-      "A Faded Photograph",
-      "A Sealed Letter, Never Opened",
-      "A Brass Key to Nowhere",
-      "A Chipped Poker Chip",
-      "A Tarnished Silver Locket"
+      { "id": "photograph", "name": "A Faded Photograph", "value": 2 },
+      { "id": "sealed_letter", "name": "A Sealed Letter, Never Opened", "value": 4 },
+      { "id": "brass_key", "name": "A Brass Key to Nowhere", "value": 2 },
+      { "id": "poker_chip", "name": "A Chipped Poker Chip", "value": 1 },
+      { "id": "silver_locket", "name": "A Tarnished Silver Locket", "value": 5 }
     ],
     "voice": {
       "accent": "Old West drawl — gravelly, unhurried, drops g's, never wastes a word",

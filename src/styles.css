@@ -1213,4 +1213,299 @@ html, body {
   background-size: 16px 16px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Action toolbar (footer buttons) ---------- */
+
+.footer-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.footer-action-btn {
+  flex: 1;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  padding: 6px 4px;
+  color: var(--parchment);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
+  background-color: var(--wood-mid);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
+    linear-gradient(180deg, var(--wood-mid), var(--wood-dark) 85%);
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.footer-action-btn:active,
+.footer-action-btn.pressed {
+  background-color: var(--parchment);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(120, 95, 55, 0.12) 0px, rgba(120, 95, 55, 0.12) 1px, transparent 1px, transparent 5px),
+    linear-gradient(180deg, var(--parchment), var(--paper) 85%);
+  color: var(--ink);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
+  transform: translateY(1px);
+}
+
+.footer-action-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ---------- Trade Proposal Modal ---------- */
+
+.trade-modal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 3, 2, 0.82);
+  padding: 14px;
+}
+
+.trade-modal {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 20% 15%, rgba(120, 95, 55, 0.16), transparent 55%),
+    radial-gradient(ellipse at 80% 85%, rgba(120, 95, 55, 0.14), transparent 55%),
+    repeating-linear-gradient(90deg, var(--paper-shadow) 0px, var(--paper-shadow) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: normal, normal, soft-light;
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  padding: 12px;
+}
+
+.trade-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.trade-modal-title {
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.trade-modal-close {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  background: var(--wood-mid);
+  color: var(--parchment);
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.trade-modal-columns {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.trade-modal-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trade-modal-col-title {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--ink);
+  opacity: 0.75;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.trade-modal-col-subtitle {
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  color: var(--ink);
+  opacity: 0.6;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.trade-item-btn {
+  font-family: inherit;
+  text-align: left;
+  font-size: 10px;
+  line-height: 1.3;
+  padding: 7px 8px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid var(--frame-brown-dim);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.trade-item-btn.selected {
+  border-color: var(--gold);
+  background: rgba(255, 215, 0, 0.22);
+  box-shadow: inset 0 0 0 1px var(--brass);
+}
+
+.trade-extra-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--ink);
+  padding: 4px 2px;
+  cursor: pointer;
+}
+
+.trade-extra-check input {
+  accent-color: var(--brass);
+}
+
+.trade-extra-check.checked {
+  font-weight: bold;
+}
+
+.trade-gauge {
+  margin-bottom: 12px;
+}
+
+.trade-gauge-track {
+  position: relative;
+  display: flex;
+  height: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 2px solid var(--frame-brown-dim);
+}
+
+.trade-gauge-zone {
+  flex: 1;
+  height: 100%;
+}
+
+.trade-gauge-zone.lowball {
+  background: var(--danger);
+  opacity: 0.55;
+}
+
+.trade-gauge-zone.fair {
+  background: var(--gold);
+  opacity: 0.55;
+}
+
+.trade-gauge-zone.generous {
+  background: #4a9a5c;
+  opacity: 0.55;
+}
+
+.trade-gauge-marker {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 16px;
+  background: var(--ink);
+  border-radius: 1px;
+  transform: translateX(-50%);
+  transition: left 200ms ease;
+}
+
+.trade-gauge-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: var(--ink);
+  opacity: 0.65;
+  margin-top: 3px;
+  letter-spacing: 0.3px;
+}
+
+.trade-modal-strategies {
+  margin-bottom: 12px;
+}
+
+.trade-strategy-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.trade-strategy-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  font-size: 10px;
+  padding: 6px 8px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid var(--frame-brown-dim);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.trade-strategy-btn .suit-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.trade-strategy-btn.selected {
+  border-color: var(--gold);
+  background: rgba(255, 215, 0, 0.22);
+  box-shadow: inset 0 0 0 1px var(--brass);
+}
+
+.trade-modal-footer {
+  display: flex;
+  gap: 8px;
+}
+
+.trade-modal-cancel,
+.trade-modal-confirm {
+  flex: 1;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 9px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.trade-modal-cancel {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid var(--frame-brown-dim);
+}
+
+.trade-modal-confirm {
+  color: var(--gold);
+  background-image:
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
+    linear-gradient(165deg, var(--wood-mid), var(--wood-dark) 85%);
+  border: 2px solid var(--brass);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.trade-modal-confirm:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
 }

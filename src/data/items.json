@@ -1,7 +1,7 @@
 {
-  "player": ["Rusty Pocket Watch"],
-  "npc": {
-    "valuable": "Deed to the Saloon",
-    "midTier": "Bottle of Aged Whiskey"
-  }
+  "player": [
+    { "id": "pocket_watch", "name": "Rusty Pocket Watch", "value": 3 },
+    { "id": "belt_buckle", "name": "Silver Belt Buckle", "value": 1 },
+    { "id": "pocket_knife", "name": "Pocket Knife", "value": 1 }
+  ]
 }

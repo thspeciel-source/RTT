@@ -12,10 +12,14 @@ Words you reach for: ${npc.voice.vernacular.join(', ')}.
 `;
 }
 
+function itemList(items) {
+  return items.map((item) => `${item.name} (worth about ${item.value})`).join(', ');
+}
+
 function secretInventoryBlock(npc) {
   if (!npc.secret_inventory || npc.secret_inventory.length === 0) return '';
   return `
-You also secretly own these ${npc.secret_inventory.length} items, which you have NOT told the player about yet: ${npc.secret_inventory.join(', ')}.
+You also secretly own these ${npc.secret_inventory.length} items, which you have NOT told the player about yet: ${itemList(npc.secret_inventory)}.
 These are the ONLY secret items you have — never invent, name, or hint at any secret item that isn't on this exact list.
 You may choose to reveal one of them by name in your dialogue if it fits the moment (e.g. as a bargaining chip, a story, or a threat). Most turns you should reveal nothing.
 `;
@@ -24,14 +28,15 @@ You may choose to reveal one of them by name in your dialogue if it fits the mom
 export function buildSystemPrompt(npc, playerInventory) {
   return `You are ${npc.name}, ${npc.personality}.
 ${npc.backstory}
-You own: ${npc.inventory.join(', ')}.
+You own: ${itemList(npc.inventory)}.
 Your goal: ${npc.goal}. You will try to get the best deal possible.
 ${voiceBlock(npc)}
 ${secretInventoryBlock(npc)}
 Your patience starts at: 1.0 (fully patient). It decreases when the player wastes your time, is rude, makes bad offers, or stalls. It can recover slightly if the player says something interesting or makes a good offer. When patience hits 0, you lose your temper and end the conversation angrily.
 Your mood starts at: valence ${npc.initialMood.valence}, arousal ${npc.initialMood.arousal}.
 
-The player has approached you to negotiate. They have: ${playerInventory.join(', ')}.
+The player has approached you to negotiate. They have: ${itemList(playerInventory)}.
+"Worth about" numbers are a rough common-sense value scale (higher = more valuable) — use them to judge whether an offer is fair, a lowball, or generous, but let your character's own priorities and mood weigh in too, not just the raw numbers.
 
 You MUST respond with ONLY a JSON object. No text before it, no text after it, no markdown fences. Just the raw JSON. Output raw JSON only. Do not wrap in backticks or markdown.
 
@@ -75,7 +80,19 @@ RULES:
 - The 4 player options should represent genuinely different approaches. Do not generate 4 variations of the same idea.
 - Your body language should match and reinforce your words. If you're suspicious, your face should show it and your arms should reflect it — don't just say suspicious things with a neutral pose.
 - Stay in character. Let your personality drive your emote and body language choices.
-- npc_dialogue MUST sound like your example lines — same rhythm, same word choice. Never write a generic sentence that any character could say.`;
+- npc_dialogue MUST sound like your example lines — same rhythm, same word choice. Never write a generic sentence that any character could say.
+
+TRADE PROPOSALS:
+Sometimes the player's message starts with "[TRADE PROPOSAL | tone: X]" — a concrete, structured offer naming exactly what they'll give you and exactly what they want back, pitched in tone X (friendly/shrewd/aggressive/deceptive).
+- Weigh the total value of what they're offering against what they're asking for, factor in your goal, your current mood/patience, and how well tone X lands with you right now.
+- Set trade_state to "accepted" only if you're genuinely taking the deal exactly as stated — this ENDS the negotiation right there and the goods are considered exchanged, so only accept a trade you actually want to be your final word.
+- Set trade_state to "rejected" if you turn it down flat but are willing to keep talking (give fresh player_options that reflect the refusal).
+- Set trade_state to "offered" if you'd rather counter, haggle, or ask for more instead of a flat yes/no.
+- Don't accept a lowball offer without at least one round of pushback first, unless the pitch and your mood genuinely justify caving.
+
+INQUIRIES ABOUT YOUR GOODS:
+Sometimes the player's message starts with "[INQUIRY]" — they're fishing to see more of what you've got beyond what's already on the table. You may reveal ONE secret item (via revealed_item, following the rules above) if it fits the moment, or rebuff them and reveal nothing ("that's my business, stranger" style).
+If the message notes this isn't their first time asking, treat it as pushy and nosy: refuse more firmly, and knock an EXTRA 0.05-0.1 off patience beyond whatever your normal patience rules already call for this turn — being pressed for your business repeatedly should visibly wear on you.`;
 }
 
 /**
