@@ -2,7 +2,7 @@ import React from 'react';
 import emoteMap from '../data/emote-map.json';
 import { NPC_BODY, FACE_IMAGES, BUBBLE_IMAGES } from '../systems/sprite-assets.js';
 
-export default function NPCSprite({ face, bubble, bodyAnim, rageOverlay }) {
+export default function NPCSprite({ face, bubble, bodyAnim }) {
   const bubbleStyle = emoteMap.bubble[bubble];
   const faceImage = FACE_IMAGES[face];
   const bubbleImage = bubble && BUBBLE_IMAGES[bubble];
@@ -25,8 +25,6 @@ export default function NPCSprite({ face, bubble, bodyAnim, rageOverlay }) {
               {bubbleStyle.icon}
             </div>
           ))}
-
-        {rageOverlay && <div className="npc-rage-overlay" />}
       </div>
     </div>
   );

@@ -8,8 +8,13 @@ import faceGrin from '../assets/sprites/face_grin.png';
 import playerBase from '../assets/sprites/player_base.png';
 import bubbleExclamation from '../assets/bubbles/bubble_exclamation.png';
 import bubbleQuestion from '../assets/bubbles/bubble_question.png';
+import bubbleDoubleQuestion from '../assets/bubbles/bubble_double_question.png';
 import bubbleAngerVein from '../assets/bubbles/bubble_anger_vein.png';
 import bubbleHeart from '../assets/bubbles/bubble_heart.png';
+import bubbleBrokenHeart from '../assets/bubbles/bubble_broken_heart.png';
+import bubbleSweatDrop from '../assets/bubbles/bubble_sweat_drop.png';
+import bubbleSkull from '../assets/bubbles/bubble_skull.png';
+import bubbleZzz from '../assets/bubbles/bubble_zzz.png';
 import bubbleSparkle from '../assets/bubbles/bubble_sparkle.png';
 import bubbleEllipsis from '../assets/bubbles/bubble_ellipsis.png';
 import suitSpade from '../assets/ui/suit_spade.png';
@@ -49,8 +54,13 @@ export const FACE_IMAGES = {
 export const BUBBLE_IMAGES = {
   exclamation: bubbleExclamation,
   question: bubbleQuestion,
+  double_question: bubbleDoubleQuestion,
   anger_vein: bubbleAngerVein,
   heart: bubbleHeart,
+  broken_heart: bubbleBrokenHeart,
+  sweat_drop: bubbleSweatDrop,
+  skull: bubbleSkull,
+  zzz: bubbleZzz,
   sparkle: bubbleSparkle,
   ellipsis: bubbleEllipsis
 };

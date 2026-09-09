@@ -34,7 +34,6 @@ export default function App() {
   const [npcDisplay, setNpcDisplay] = useState(toDisplay(getDefaultResponse()));
   const [dialogueSpeed, setDialogueSpeed] = useState(20);
   const [screenShake, setScreenShake] = useState(false);
-  const [rageOverlay, setRageOverlay] = useState(false);
   const [crashed, setCrashed] = useState(false);
   const [endOutcome, setEndOutcome] = useState(null);
   const [endSummary, setEndSummary] = useState('');
@@ -169,7 +168,6 @@ export default function App() {
     await sleep(500);
     setScreenShake(false);
     setNpcDisplay({ face: 'rage', arms: 'fist_slam', bubble: 'anger_vein', body_anim: 'slam' });
-    setRageOverlay(true);
     await sleep(600);
     setCurrent(resp);
     setDialogueSpeed(12);
@@ -179,7 +177,6 @@ export default function App() {
   async function handleDialogueFinished() {
     const outcome = pendingOutcomeRef.current;
     if (outcome === 'hostile_end') {
-      setRageOverlay(false);
       setNpcDisplay((prev) => ({ ...prev, body_anim: 'storm_off' }));
       await sleep(800);
       setEndOutcome('hostile_end');
@@ -302,7 +299,6 @@ export default function App() {
   function handleRestart() {
     setEndOutcome(null);
     setEndSummary('');
-    setRageOverlay(false);
     setCrashed(false);
     setScreenShake(false);
     setPlayerItems(itemsData.player);
@@ -355,7 +351,6 @@ export default function App() {
                   onSelectOption={handleSelectOption}
                   thinking={thinking}
                   screenShake={screenShake}
-                  rageOverlay={rageOverlay}
                   crashed={crashed}
                   endOutcome={endOutcome}
                   endSummary={endSummary}

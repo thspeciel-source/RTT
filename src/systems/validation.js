@@ -23,6 +23,25 @@ export function clamp(val, min, max) {
   return Math.max(min, Math.min(max, Number(val) || 0));
 }
 
+const OPTION_TEXT_LIMIT = 60;
+
+// Backstop for the "max 60 chars" prompt rule — the button this fills is a
+// fixed size no matter what, so an LLM that ignores the limit gets clipped
+// here rather than ever pushing the layout around.
+function truncateText(text) {
+  const str = String(text);
+  if (str.length <= OPTION_TEXT_LIMIT) return str;
+  return `${str.slice(0, OPTION_TEXT_LIMIT - 1).trimEnd()}…`;
+}
+
+// Player options always occupy the same position for the same approach —
+// index 0 is always friendly, 1 shrewd, 2 aggressive, 3 deceptive — so the
+// suit icon and button slot the player learns to recognize never shifts
+// around. The system prompt asks the LLM to already return them this way;
+// this order is enforced here regardless, since the game must never show
+// them in a different order even if the LLM doesn't comply.
+export const STRATEGY_ORDER = ['friendly', 'shrewd', 'aggressive', 'deceptive'];
+
 export function getDefaultOptions() {
   return [
     { label: 'Be friendly', strategy: 'friendly', text: "Let's talk this through." },
@@ -30,6 +49,29 @@ export function getDefaultOptions() {
     { label: 'Be direct', strategy: 'aggressive', text: "Here's how it's going to be." },
     { label: 'Deflect', strategy: 'deceptive', text: "That's not quite what I meant..." }
   ];
+}
+
+// Returns the reordered options plus a permutation array: permutation[newIndex]
+// is the ORIGINAL index that option came from (or null if a default filled an
+// empty slot). The caller needs this to keep pre_responses — which are keyed
+// to the LLM's original, pre-reorder positions — pointing at the right button.
+function reorderByStrategy(options) {
+  const defaults = getDefaultOptions();
+  const byStrategy = {};
+  options.forEach((opt, i) => {
+    if (!(opt.strategy in byStrategy)) byStrategy[opt.strategy] = i;
+  });
+  const permutation = [];
+  const reordered = STRATEGY_ORDER.map((strategy, i) => {
+    const origIndex = byStrategy[strategy];
+    if (origIndex !== undefined) {
+      permutation.push(origIndex);
+      return options[origIndex];
+    }
+    permutation.push(null);
+    return defaults[i];
+  });
+  return { reordered, permutation };
 }
 
 export function getDefaultResponse() {
@@ -70,12 +112,16 @@ function validateCore(data) {
 
   if (!Array.isArray(data.player_options) || data.player_options.length !== 4) {
     data.player_options = getDefaultOptions();
+    data._optionPermutation = [0, 1, 2, 3];
   } else {
-    data.player_options = data.player_options.map((opt, i) => ({
+    const mapped = data.player_options.map((opt, i) => ({
       label: (opt && opt.label) || ['Friendly', 'Shrewd', 'Aggressive', 'Deceptive'][i],
       strategy: opt && VALID.strategy.includes(opt.strategy) ? opt.strategy : VALID.strategy[i],
-      text: (opt && opt.text) || 'Continue the conversation.'
+      text: truncateText((opt && opt.text) || 'Continue the conversation.')
     }));
+    const { reordered, permutation } = reorderByStrategy(mapped);
+    data.player_options = reordered;
+    data._optionPermutation = permutation;
   }
 
   return data;
@@ -102,16 +148,26 @@ export function validateResponse(raw) {
   }
 
   data = validateCore(data);
+  const optionPermutation = data._optionPermutation || [0, 1, 2, 3];
+  delete data._optionPermutation;
 
   if (data.pre_responses && typeof data.pre_responses === 'object') {
+    // pre_responses arrived keyed to the LLM's ORIGINAL (pre-reorder) option
+    // positions — remap them through the same permutation used above so
+    // pre_responses["<new button index>"] still matches the option now
+    // showing in that slot.
+    const rawPreResponses = data.pre_responses;
     const nextPreResponses = {};
-    for (const key of ['0', '1', '2', '3']) {
-      if (data.pre_responses[key]) {
-        const validated = validateCore({ ...data.pre_responses[key] });
+    for (let newIndex = 0; newIndex < 4; newIndex++) {
+      const origIndex = optionPermutation[newIndex];
+      const source = origIndex !== null ? rawPreResponses[String(origIndex)] : null;
+      if (source) {
+        const validated = validateCore({ ...source });
         delete validated.pre_responses;
-        nextPreResponses[key] = validated;
+        delete validated._optionPermutation;
+        nextPreResponses[String(newIndex)] = validated;
       } else {
-        nextPreResponses[key] = getDefaultResponse();
+        nextPreResponses[String(newIndex)] = getDefaultResponse();
       }
     }
     data.pre_responses = nextPreResponses;

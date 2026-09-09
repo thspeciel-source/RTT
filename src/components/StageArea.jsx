@@ -19,7 +19,7 @@ const WIND_STREAKS = [
   { top: '90%', duration: '9.2s', delay: '-4.5s' }
 ];
 
-export default function StageArea({ mood, patience, npc, crashed, rageOverlay }) {
+export default function StageArea({ mood, patience, npc, crashed }) {
   return (
     <div className="stage-area">
       <MoodBackground valence={mood.valence} arousal={mood.arousal} patience={patience} crashed={crashed} />
@@ -43,12 +43,7 @@ export default function StageArea({ mood, patience, npc, crashed, rageOverlay })
         <img className="npc-layer-img npc-shadow-img" src={NPC_SHADOW} alt="" />
       </div>
       <PlayerSprite />
-      <NPCSprite
-        face={npc.face}
-        bubble={npc.bubble}
-        bodyAnim={npc.body_anim}
-        rageOverlay={rageOverlay}
-      />
+      <NPCSprite face={npc.face} bubble={npc.bubble} bodyAnim={npc.body_anim} />
     </div>
   );
 }

@@ -19,7 +19,6 @@ export default function BattleScene({
   onSelectOption,
   thinking,
   screenShake,
-  rageOverlay,
   crashed,
   endOutcome,
   endSummary,
@@ -44,7 +43,7 @@ export default function BattleScene({
 
   return (
     <div className={`battle-scene${screenShake ? ' screen-shake' : ''}`} onClickCapture={handleSceneClickCapture}>
-      <StageArea mood={mood} patience={patience} npc={npc} crashed={crashed} rageOverlay={rageOverlay} />
+      <StageArea mood={mood} patience={patience} npc={npc} crashed={crashed} />
       <div className="bottom-panel">
         <DialogueBox
           key={dialogueText}

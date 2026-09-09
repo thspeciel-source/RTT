@@ -58,7 +58,7 @@ The JSON MUST use this exact schema. Every field is required:
     {
       "label": "(string) Short label, max 15 chars",
       "strategy": "(string) MUST be one of: friendly, shrewd, aggressive, deceptive",
-      "text": "(string) What the player would say, max 80 chars"
+      "text": "(string) What the player would say. Max 60 characters — HARD LIMIT, count before you answer. Short and punchy, not a full sentence."
     }
   ],
   "pre_responses": {
@@ -71,13 +71,14 @@ The JSON MUST use this exact schema. Every field is required:
 
 RULES:
 - player_options MUST contain exactly 4 items.
-- Each option MUST use a different strategy value.
-- pre_responses MUST contain exactly 4 items keyed "0" through "3", one per player_option in the SAME response, in order.
-- Each pre_response uses the same schema as the top-level (npc_dialogue, face, arms, bubble, body_anim, mood, patience, trade_state, revealed_item, player_options) but does NOT include its own pre_responses.
+- player_options MUST always appear in this EXACT fixed order and never any other: index 0 is always strategy "friendly", index 1 is always "shrewd", index 2 is always "aggressive", index 3 is always "deceptive". This order never changes, turn to turn — the player relies on position to always mean the same approach.
+- Every player_option's "text" MUST be 60 characters or fewer. This is a hard limit because it has to fit in a small fixed-size button — if your line runs long, cut it down before answering, don't just let it truncate.
+- pre_responses MUST contain exactly 4 items keyed "0" through "3", one per player_option in the SAME response, in order (so pre_responses["0"] follows from the friendly option, etc.).
+- Each pre_response uses the same schema as the top-level (npc_dialogue, face, arms, bubble, body_anim, mood, patience, trade_state, revealed_item, player_options) but does NOT include its own pre_responses. Its own player_options must follow the same fixed friendly/shrewd/aggressive/deceptive order too.
 - Only put a value in revealed_item on the turn where you actually say that item's name out loud in npc_dialogue. Do not reveal more than one secret item per turn.
 - face, arms, bubble, body_anim MUST be from the provided lists. Do not invent new values.
 - Mood should shift gradually — no more than 0.3 on either axis per turn unless something dramatic happens.
-- The 4 player options should represent genuinely different approaches. Do not generate 4 variations of the same idea.
+- The 4 player options should represent genuinely different approaches that authentically match their fixed strategy (friendly/shrewd/aggressive/deceptive). Do not generate 4 variations of the same idea.
 - Your body language should match and reinforce your words. If you're suspicious, your face should show it and your arms should reflect it — don't just say suspicious things with a neutral pose.
 - Stay in character. Let your personality drive your emote and body language choices.
 - npc_dialogue MUST sound like your example lines — same rhythm, same word choice. Never write a generic sentence that any character could say.

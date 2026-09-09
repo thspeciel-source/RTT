@@ -523,14 +523,6 @@ html, body {
   50% { transform: translateX(-50%) translateY(-4px); }
 }
 
-.npc-rage-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(200, 30, 30, 0.35);
-  mix-blend-mode: multiply;
-  border-radius: 8px;
-}
-
 /* Body animations, applied to .npc-sprite / .player-sprite */
 
 @keyframes idle {
@@ -706,7 +698,10 @@ html, body {
   color: var(--ink);
   font-family: inherit;
   cursor: pointer;
-  min-height: 92px;
+  box-sizing: border-box;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
   transition: opacity 300ms ease, border-color 150ms ease, filter 80ms ease-out;
 }
 
@@ -783,8 +778,8 @@ html, body {
 }
 
 .suit-icon {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   flex-shrink: 0;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
@@ -792,9 +787,10 @@ html, body {
 
 .choice-button-text {
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex: 1;
   font-family: inherit;
   font-size: 11px;
   line-height: 1.4;
