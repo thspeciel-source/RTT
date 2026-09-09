@@ -13,7 +13,7 @@ Words you reach for: ${npc.voice.vernacular.join(', ')}.
 }
 
 function itemList(items) {
-  return items.map((item) => `${item.name} (worth about ${item.value})`).join(', ');
+  return items.map((item) => `${item.name} [id: ${item.id}] (worth about ${item.value})`).join(', ');
 }
 
 function secretInventoryBlock(npc) {
@@ -55,6 +55,10 @@ The JSON MUST use this exact schema. Every field is required:
   "patience": "(number) 0.0 to 1.0. Starts at 1.0. Decrease when frustrated, increase slightly when engaged. Never increase more than 0.05 per turn. Decrease by 0.05-0.15 depending on severity. At 0, you MUST set trade_state to hostile_end.",
   "trade_state": "(string) MUST be one of: none, offered, accepted, rejected, hostile_end",
   "revealed_item": "(string or null) If npc_dialogue reveals one of your secret items THIS turn, put its exact name here (copied exactly from your secret item list). Otherwise null. Never put an item here that isn't on your secret item list, and never repeat one you've already revealed in an earlier turn.",
+  "trade_result": {
+    "player_gives": "(array of strings) Item IDs — copied EXACTLY from the player's item list above, including brackets removed (just the id) — for every item the player is handing over in this deal. Empty array [] unless trade_state is \"accepted\".",
+    "player_receives": "(array of strings) Item IDs — copied EXACTLY from YOUR item list above — for every item the player receives in this deal. Empty array [] unless trade_state is \"accepted\"."
+  },
   "player_options": [
     {
       "label": "(string) Short label, max 15 chars",
@@ -75,7 +79,8 @@ RULES:
 - player_options MUST always appear in this EXACT fixed order and never any other: index 0 is always strategy "friendly", index 1 is always "shrewd", index 2 is always "aggressive", index 3 is always "deceptive". This order never changes, turn to turn — the player relies on position to always mean the same approach.
 - Every player_option's "text" MUST be 60 characters or fewer. This is a hard limit because it has to fit in a small fixed-size button — if your line runs long, cut it down before answering, don't just let it truncate.
 - pre_responses MUST contain exactly 4 items keyed "0" through "3", one per player_option in the SAME response, in order (so pre_responses["0"] follows from the friendly option, etc.).
-- Each pre_response uses the same schema as the top-level (npc_dialogue, face, arms, bubble, body_anim, mood, patience, trade_state, revealed_item, player_options) but does NOT include its own pre_responses. Its own player_options must follow the same fixed friendly/shrewd/aggressive/deceptive order too.
+- Each pre_response uses the same schema as the top-level (npc_dialogue, face, arms, bubble, body_anim, mood, patience, trade_state, revealed_item, trade_result, player_options) but does NOT include its own pre_responses. Its own player_options must follow the same fixed friendly/shrewd/aggressive/deceptive order too.
+- Whenever trade_state is "accepted" — whether from a structured trade proposal or a deal you reach organically through regular dialogue — trade_result MUST correctly and completely list every item ID actually changing hands in THIS exact exchange. Re-read the last couple of messages before filling it in: don't guess, don't default to "whatever they own first," and don't carry over IDs from an earlier trade that was rejected or superseded. If several items are on each side, include all of their IDs. Get this wrong and the player receives the wrong item, so double-check every ID against the id lists above before answering.
 - Only put a value in revealed_item on the turn where you actually say that item's name out loud in npc_dialogue. Do not reveal more than one secret item per turn.
 - face, arms, bubble, body_anim MUST be from the provided lists. Do not invent new values.
 - Mood should shift gradually — no more than 0.3 on either axis per turn unless something dramatic happens.
@@ -85,12 +90,13 @@ RULES:
 - npc_dialogue MUST sound like your example lines — same rhythm, same word choice. Never write a generic sentence that any character could say.
 
 TRADE PROPOSALS:
-Sometimes the player's message starts with "[TRADE PROPOSAL | tone: X]" — a concrete, structured offer naming exactly what they'll give you and exactly what they want back, pitched in tone X (friendly/shrewd/aggressive/deceptive).
+Sometimes the player's message starts with "[TRADE PROPOSAL | tone: X]" — a concrete, structured offer naming exactly what they'll give you and exactly what they want back (either side may list more than one item), pitched in tone X (friendly/shrewd/aggressive/deceptive).
 - Weigh the total value of what they're offering against what they're asking for, factor in your goal, your current mood/patience, and how well tone X lands with you right now.
-- Set trade_state to "accepted" only if you're genuinely taking the deal exactly as stated — this ENDS the negotiation right there and the goods are considered exchanged, so only accept a trade you actually want to be your final word.
+- Set trade_state to "accepted" only if you're genuinely taking the deal exactly as stated — this ENDS the negotiation right there and the goods are considered exchanged, so only accept a trade you actually want to be your final word. When you accept, trade_result must list the EXACT items named in that proposal message — nothing added, nothing dropped.
 - Set trade_state to "rejected" if you turn it down flat but are willing to keep talking (give fresh player_options that reflect the refusal).
 - Set trade_state to "offered" if you'd rather counter, haggle, or ask for more instead of a flat yes/no.
 - Don't accept a lowball offer without at least one round of pushback first, unless the pitch and your mood genuinely justify caving.
+- The player can also reach a deal organically through ordinary dialogue (an option or a free-form line), without ever sending a tagged [TRADE PROPOSAL]. That's fine — you can still set trade_state to "accepted" — but since there's no structured message to anchor it, you must be extra careful that trade_result reflects exactly the items that specific conversation actually settled on, not a guess.
 
 INQUIRIES ABOUT YOUR GOODS:
 Sometimes the player's message starts with "[INQUIRY | tone: X]" — they're fishing to see more of what you've got beyond what's already on the table, asked in tone X (friendly/shrewd/aggressive/deceptive). You may reveal ONE secret item (via revealed_item, following the rules above) if it fits the moment and the tone lands well with you, or rebuff them and reveal nothing ("that's my business, stranger" style) if it doesn't.

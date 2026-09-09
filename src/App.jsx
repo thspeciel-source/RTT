@@ -46,7 +46,6 @@ export default function App() {
 
   const invTransitionTimeoutRef = useRef(null);
   const pendingOutcomeRef = useRef(null);
-  const pendingTradeRef = useRef(null);
   const lastTradeRef = useRef(null);
   const inquiryCountRef = useRef(0);
   const turnIndexRef = useRef(0);
@@ -130,7 +129,6 @@ export default function App() {
 
   function applyDisplayOnly(resp) {
     if (resp.trade_state === 'hostile_end') {
-      pendingTradeRef.current = null;
       runCrashIntro(resp);
       return;
     }
@@ -142,23 +140,21 @@ export default function App() {
       }
     }
 
-    // An "accepted" trade_state means the goods genuinely change hands —
-    // whether it's answering a structured trade proposal we sent, or the
-    // LLM organically agreeing to a deal mid-conversation without one.
-    // Either way the player's and Sal's inventories must actually swap,
-    // not just have the end screen narrate a swap that never happened.
-    const structuredTrade = pendingTradeRef.current;
-    pendingTradeRef.current = null;
+    // An "accepted" trade_state means the goods genuinely change hands. The
+    // LLM itself reports exactly which item IDs are involved via
+    // trade_result — built from whatever it actually just discussed with
+    // the player, structured proposal or not — so the swap always matches
+    // the real context of the deal instead of the client guessing.
     lastTradeRef.current = null;
     if (resp.trade_state === 'accepted') {
-      const trade =
-        structuredTrade ||
-        (playerItems[0] && npcItems[0] ? { offerItems: [playerItems[0]], requestItem: npcItems[0] } : null);
-      if (trade) {
-        const offerIds = trade.offerItems.map((i) => i.id);
-        setPlayerItems((prev) => prev.filter((i) => !offerIds.includes(i.id)).concat([trade.requestItem]));
-        setNpcItems((prev) => prev.filter((i) => i.id !== trade.requestItem.id).concat(trade.offerItems));
-        lastTradeRef.current = trade;
+      const giveIds = resp.trade_result?.player_gives || [];
+      const receiveIds = resp.trade_result?.player_receives || [];
+      const giveItems = playerItems.filter((i) => giveIds.includes(i.id));
+      const receiveItems = npcItems.filter((i) => receiveIds.includes(i.id));
+      if (giveItems.length > 0 || receiveItems.length > 0) {
+        setPlayerItems((prev) => prev.filter((i) => !giveIds.includes(i.id)).concat(receiveItems));
+        setNpcItems((prev) => prev.filter((i) => !receiveIds.includes(i.id)).concat(giveItems));
+        lastTradeRef.current = { giveItems, receiveItems };
       }
     }
 
@@ -192,10 +188,11 @@ export default function App() {
       setPhase('ended');
     } else if (outcome === 'accepted') {
       const trade = lastTradeRef.current;
-      if (trade) {
-        const offerNames = trade.offerItems.map((i) => i.name).join(' and ');
-        setEndSummary(`You handed over the ${offerNames} and walked away with the ${trade.requestItem.name}.`);
-        setWonItemName(trade.requestItem.name);
+      if (trade && (trade.giveItems.length || trade.receiveItems.length)) {
+        const giveNames = trade.giveItems.map((i) => i.name).join(' and ') || 'nothing';
+        const receiveNames = trade.receiveItems.map((i) => i.name).join(' and ') || 'nothing';
+        setEndSummary(`You handed over the ${giveNames} and walked away with the ${receiveNames}.`);
+        setWonItemName(trade.receiveItems.map((i) => i.name).join(' & '));
       } else {
         setEndSummary('You made a deal.');
         setWonItemName('');
@@ -224,7 +221,6 @@ export default function App() {
       applyDisplayOnly(fresh);
     } catch (e) {
       console.error('LLM call failed, using safe default', e);
-      pendingTradeRef.current = null;
       applyDisplayOnly(getDefaultResponse());
     }
   }
@@ -296,9 +292,9 @@ export default function App() {
   async function handleProposeTrade(proposal) {
     setTradeModalOpen(false);
     if (mode !== 'llm' || (phase !== 'choices' && phase !== 'dialogue')) return;
-    pendingTradeRef.current = proposal;
     const offerText = proposal.offerItems.map((i) => i.name).join(' and ');
-    const message = `[TRADE PROPOSAL | tone: ${proposal.strategy}] I'll give you ${offerText} for your ${proposal.requestItem.name}.`;
+    const requestText = proposal.requestItems.map((i) => i.name).join(' and ');
+    const message = `[TRADE PROPOSAL | tone: ${proposal.strategy}] I'll give you ${offerText} for your ${requestText}.`;
     preloadCache.clear();
     await sendFreshMessage(message);
   }
@@ -323,7 +319,6 @@ export default function App() {
     setNpcItems(NPC.inventory);
     setTradeModalOpen(false);
     pendingOutcomeRef.current = null;
-    pendingTradeRef.current = null;
     lastTradeRef.current = null;
     inquiryCountRef.current = 0;
     preloadCache.clear();

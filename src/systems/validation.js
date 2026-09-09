@@ -85,7 +85,19 @@ export function getDefaultResponse() {
     patience: 0.5,
     trade_state: 'none',
     revealed_item: null,
+    trade_result: { player_gives: [], player_receives: [] },
     player_options: getDefaultOptions()
+  };
+}
+
+function validateTradeResult(raw) {
+  const isIdArray = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string') : []);
+  if (!raw || typeof raw !== 'object') {
+    return { player_gives: [], player_receives: [] };
+  }
+  return {
+    player_gives: isIdArray(raw.player_gives),
+    player_receives: isIdArray(raw.player_receives)
   };
 }
 
@@ -105,6 +117,8 @@ function validateCore(data) {
   data.patience = clamp(data.patience ?? 0.5, 0, 1);
 
   data.revealed_item = typeof data.revealed_item === 'string' && data.revealed_item.trim() ? data.revealed_item : null;
+
+  data.trade_result = data.trade_state === 'accepted' ? validateTradeResult(data.trade_result) : { player_gives: [], player_receives: [] };
 
   if (!data.npc_dialogue || typeof data.npc_dialogue !== 'string') {
     data.npc_dialogue = '...';

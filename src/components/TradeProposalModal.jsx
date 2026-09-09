@@ -9,36 +9,31 @@ const STRATEGIES = [
 ];
 
 export default function TradeProposalModal({ playerItems, npcItems, onCancel, onPropose }) {
-  const [offerId, setOfferId] = useState(null);
-  const [extraIds, setExtraIds] = useState([]);
-  const [requestId, setRequestId] = useState(null);
+  const [offerIds, setOfferIds] = useState([]);
+  const [requestIds, setRequestIds] = useState([]);
   const [strategy, setStrategy] = useState('friendly');
 
-  const offerItem = playerItems.find((i) => i.id === offerId) || null;
-  const extraItems = playerItems.filter((i) => extraIds.includes(i.id));
-  const requestItem = npcItems.find((i) => i.id === requestId) || null;
+  const offerItems = playerItems.filter((i) => offerIds.includes(i.id));
+  const requestItems = npcItems.filter((i) => requestIds.includes(i.id));
 
-  function selectOffer(id) {
-    const next = id === offerId ? null : id;
-    setOfferId(next);
-    setExtraIds((prev) => prev.filter((x) => x !== id));
+  function toggleOffer(id) {
+    setOfferIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }
 
-  function toggleExtra(id) {
-    if (id === offerId) return;
-    setExtraIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  function toggleRequest(id) {
+    setRequestIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }
 
-  const offerValue = (offerItem?.value || 0) + extraItems.reduce((sum, i) => sum + i.value, 0);
-  const requestValue = requestItem?.value || 0;
+  const offerValue = offerItems.reduce((sum, i) => sum + i.value, 0);
+  const requestValue = requestItems.reduce((sum, i) => sum + i.value, 0);
   const ratio = requestValue > 0 ? offerValue / requestValue : 0;
   const gaugePct = Math.max(2, Math.min(98, (ratio / 2) * 100));
-  const hasGaugeReading = Boolean(offerItem && requestItem);
-  const canPropose = Boolean(offerItem && requestItem);
+  const hasGaugeReading = offerItems.length > 0 && requestItems.length > 0;
+  const canPropose = hasGaugeReading;
 
   function handlePropose() {
     if (!canPropose) return;
-    onPropose({ offerItems: [offerItem, ...extraItems], requestItem, strategy });
+    onPropose({ offerItems, requestItems, strategy });
   }
 
   return (
@@ -58,32 +53,12 @@ export default function TradeProposalModal({ playerItems, npcItems, onCancel, on
               <button
                 key={item.id}
                 type="button"
-                className={`trade-item-btn${offerId === item.id ? ' selected' : ''}`}
-                onClick={() => selectOffer(item.id)}
+                className={`trade-item-btn${offerIds.includes(item.id) ? ' selected' : ''}`}
+                onClick={() => toggleOffer(item.id)}
               >
                 {item.name}
               </button>
             ))}
-            {playerItems.length > 1 && (
-              <>
-                <div className="trade-modal-col-subtitle">Throw in extra</div>
-                {playerItems
-                  .filter((i) => i.id !== offerId)
-                  .map((item) => (
-                    <label
-                      key={item.id}
-                      className={`trade-extra-check${extraIds.includes(item.id) ? ' checked' : ''}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={extraIds.includes(item.id)}
-                        onChange={() => toggleExtra(item.id)}
-                      />
-                      {item.name}
-                    </label>
-                  ))}
-              </>
-            )}
           </div>
 
           <div className="trade-modal-col">
@@ -95,8 +70,8 @@ export default function TradeProposalModal({ playerItems, npcItems, onCancel, on
                 <button
                   key={item.id}
                   type="button"
-                  className={`trade-item-btn${requestId === item.id ? ' selected' : ''}`}
-                  onClick={() => setRequestId(item.id === requestId ? null : item.id)}
+                  className={`trade-item-btn${requestIds.includes(item.id) ? ' selected' : ''}`}
+                  onClick={() => toggleRequest(item.id)}
                 >
                   {item.name}
                 </button>

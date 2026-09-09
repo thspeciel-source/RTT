@@ -1430,15 +1430,6 @@ html, body {
   margin-bottom: 2px;
 }
 
-.trade-modal-col-subtitle {
-  font-size: 9px;
-  letter-spacing: 0.4px;
-  color: var(--ink);
-  opacity: 0.6;
-  font-style: italic;
-  margin-top: 4px;
-}
-
 .trade-item-btn {
   font-family: inherit;
   text-align: left;
@@ -1457,24 +1448,6 @@ html, body {
   border-color: var(--gold);
   background: rgba(255, 215, 0, 0.22);
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px var(--brass);
-}
-
-.trade-extra-check {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10px;
-  color: var(--ink);
-  padding: 4px 2px;
-  cursor: pointer;
-}
-
-.trade-extra-check input {
-  accent-color: var(--brass);
-}
-
-.trade-extra-check.checked {
-  font-weight: bold;
 }
 
 .trade-gauge {

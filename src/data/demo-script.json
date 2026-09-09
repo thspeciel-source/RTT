@@ -74,6 +74,7 @@
     "mood": { "valence": 0.5, "arousal": 0.4 },
     "patience": 0.5,
     "trade_state": "accepted",
+    "trade_result": { "player_gives": ["pocket_watch"], "player_receives": ["six_shooter"] },
     "player_options": []
   },
   "endingHostile": {
