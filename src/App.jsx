@@ -140,18 +140,24 @@ export default function App() {
       }
     }
 
-    // If this response is answering a structured trade proposal we sent,
-    // an "accepted" trade_state means the goods genuinely change hands —
-    // pull the offered item(s) out of the player's bag and into Sal's,
-    // and vice versa for the requested item.
-    const trade = pendingTradeRef.current;
+    // An "accepted" trade_state means the goods genuinely change hands —
+    // whether it's answering a structured trade proposal we sent, or the
+    // LLM organically agreeing to a deal mid-conversation without one.
+    // Either way the player's and Sal's inventories must actually swap,
+    // not just have the end screen narrate a swap that never happened.
+    const structuredTrade = pendingTradeRef.current;
     pendingTradeRef.current = null;
     lastTradeRef.current = null;
-    if (resp.trade_state === 'accepted' && trade) {
-      const offerIds = trade.offerItems.map((i) => i.id);
-      setPlayerItems((prev) => prev.filter((i) => !offerIds.includes(i.id)).concat([trade.requestItem]));
-      setNpcItems((prev) => prev.filter((i) => i.id !== trade.requestItem.id).concat(trade.offerItems));
-      lastTradeRef.current = trade;
+    if (resp.trade_state === 'accepted') {
+      const trade =
+        structuredTrade ||
+        (playerItems[0] && npcItems[0] ? { offerItems: [playerItems[0]], requestItem: npcItems[0] } : null);
+      if (trade) {
+        const offerIds = trade.offerItems.map((i) => i.id);
+        setPlayerItems((prev) => prev.filter((i) => !offerIds.includes(i.id)).concat([trade.requestItem]));
+        setNpcItems((prev) => prev.filter((i) => i.id !== trade.requestItem.id).concat(trade.offerItems));
+        lastTradeRef.current = trade;
+      }
     }
 
     setNpcDisplay(toDisplay(resp));
@@ -189,12 +195,8 @@ export default function App() {
         setEndSummary(`You handed over the ${offerNames} and walked away with the ${trade.requestItem.name}.`);
         setWonItemName(trade.requestItem.name);
       } else {
-        setEndSummary(
-          `You handed over the ${playerItems[0]?.name || 'your item'} and walked away with the ${
-            npcItems[0]?.name || 'their item'
-          }.`
-        );
-        setWonItemName(npcItems[0]?.name || '');
+        setEndSummary('You made a deal.');
+        setWonItemName('');
       }
       setEndOutcome('accepted');
       setPhase('ended');
