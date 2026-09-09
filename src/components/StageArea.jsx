@@ -4,6 +4,7 @@ import AmbientParticles from './AmbientParticles.jsx';
 import PatienceBar from './PatienceBar.jsx';
 import NPCSprite from './NPCSprite.jsx';
 import PlayerSprite from './PlayerSprite.jsx';
+import { NPC_SHADOW } from '../systems/sprite-assets.js';
 
 const WIND_STREAKS = [
   { top: '8%', duration: '7s', delay: '0s' },
@@ -35,6 +36,12 @@ export default function StageArea({ mood, patience, npc, crashed, rageOverlay })
         ))}
       </div>
       <PatienceBar patience={patience} />
+      {/* Sal's ground shadow renders here — before the player sprite — so it
+          stays behind the player instead of appearing to float in front of
+          them; his own body (in NPCSprite below) still layers on top. */}
+      <div className="npc-sprite-wrap">
+        <img className="npc-layer-img npc-shadow-img" src={NPC_SHADOW} alt="" />
+      </div>
       <PlayerSprite />
       <NPCSprite
         face={npc.face}

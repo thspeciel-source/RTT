@@ -18,6 +18,8 @@ import suitClub from '../assets/ui/suit_club.png';
 import suitHeart from '../assets/ui/suit_heart.png';
 import pouchIcon from '../assets/ui/pouch_icon.png';
 import strongboxIcon from '../assets/ui/strongbox_icon.png';
+import swapIcon from '../assets/ui/swap_icon.png';
+import inquiryIcon from '../assets/ui/inquiry_icon.png';
 
 // Real pixellab.ai art for Dusty Sal. NPC_BODY is the full character at
 // native resolution (128x253) with a neutral expression baked in — face
@@ -62,3 +64,5 @@ export const SUIT_IMAGES = {
 
 export const POUCH_ICON = pouchIcon;
 export const STRONGBOX_ICON = strongboxIcon;
+export const SWAP_ICON = swapIcon;
+export const INQUIRY_ICON = inquiryIcon;

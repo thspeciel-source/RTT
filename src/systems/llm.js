@@ -91,8 +91,8 @@ Sometimes the player's message starts with "[TRADE PROPOSAL | tone: X]" — a co
 - Don't accept a lowball offer without at least one round of pushback first, unless the pitch and your mood genuinely justify caving.
 
 INQUIRIES ABOUT YOUR GOODS:
-Sometimes the player's message starts with "[INQUIRY]" — they're fishing to see more of what you've got beyond what's already on the table. You may reveal ONE secret item (via revealed_item, following the rules above) if it fits the moment, or rebuff them and reveal nothing ("that's my business, stranger" style).
-If the message notes this isn't their first time asking, treat it as pushy and nosy: refuse more firmly, and knock an EXTRA 0.05-0.1 off patience beyond whatever your normal patience rules already call for this turn — being pressed for your business repeatedly should visibly wear on you.`;
+Sometimes the player's message starts with "[INQUIRY | tone: X]" — they're fishing to see more of what you've got beyond what's already on the table, asked in tone X (friendly/shrewd/aggressive/deceptive). You may reveal ONE secret item (via revealed_item, following the rules above) if it fits the moment and the tone lands well with you, or rebuff them and reveal nothing ("that's my business, stranger" style) if it doesn't.
+If the message notes this isn't their first time asking, treat it as pushy and nosy: refuse more firmly, and knock an EXTRA 0.05-0.1 off patience beyond whatever your normal patience rules already call for this turn — being pressed for your business repeatedly should visibly wear on you, no matter how nicely they ask.`;
 }
 
 /**

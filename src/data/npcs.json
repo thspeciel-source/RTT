@@ -4,10 +4,10 @@
     "name": "Dusty Sal",
     "personality": "a gruff but fair saloon owner who's seen too much and trusts no one quickly",
     "backstory": "Sal has run the Last Chance Saloon for twenty years and buried two business partners who tried to cheat him. He respects boldness and honesty far more than flattery, and he can smell a con from across the room.",
-    "goal": "get the best possible deal without giving up the saloon deed for less than it's worth",
+    "goal": "get the best possible deal without giving away anything he owns for less than it's worth",
     "initialMood": { "valence": 0.0, "arousal": 0.3 },
     "inventory": [
-      { "id": "deed", "name": "Deed to the Saloon", "value": 10 },
+      { "id": "six_shooter", "name": "Engraved Silver Six-Shooter", "value": 10 },
       { "id": "whiskey", "name": "Bottle of Aged Whiskey", "value": 3 }
     ],
     "secret_inventory": [
@@ -23,7 +23,7 @@
       "example_lines": [
         "Reckon you best state your business, stranger.",
         "Ain't got time for sweet talk. What're you sellin'?",
-        "Now that's a mighty fine watch. Still ain't the deed though.",
+        "Now that's a mighty fine watch. Still ain't near enough, partner.",
         "You're plumb outta your mind if you think that's a fair trade.",
         "Fixin' to lose my patience real quick, partner."
       ]

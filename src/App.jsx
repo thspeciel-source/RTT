@@ -9,7 +9,7 @@ import demoScript from './data/demo-script.json';
 import { buildSystemPrompt, getNPCResponse } from './systems/llm.js';
 import { getDefaultResponse } from './systems/validation.js';
 import { createPreloadCache } from './systems/preloader.js';
-import { STRONGBOX_ICON } from './systems/sprite-assets.js';
+import { STRONGBOX_ICON, SWAP_ICON } from './systems/sprite-assets.js';
 
 const NPC = npcsData.dusty_sal;
 
@@ -289,12 +289,12 @@ export default function App() {
     await sendFreshMessage(message);
   }
 
-  async function handleInquireGoods() {
+  async function handleInquireGoods(tone) {
     if (mode !== 'llm' || (phase !== 'choices' && phase !== 'dialogue')) return;
     inquiryCountRef.current += 1;
     const count = inquiryCountRef.current;
     const repeatNote = count > 1 ? ` (This is the ${ordinal(count)} time the player has asked this.)` : '';
-    const message = `[INQUIRY] The player asks what else you might have worth trading, beyond what they've already seen.${repeatNote}`;
+    const message = `[INQUIRY | tone: ${tone}] The player asks what else you might have worth trading, beyond what they've already seen.${repeatNote}`;
     preloadCache.clear();
     await sendFreshMessage(message);
   }
@@ -360,13 +360,9 @@ export default function App() {
                   endOutcome={endOutcome}
                   endSummary={endSummary}
                   onRestart={handleRestart}
-                  showActions={mode === 'llm' && !endOutcome}
-                  actionsDisabled={thinking}
                   tradeModalOpen={tradeModalOpen}
-                  onOpenTradeModal={handleOpenTradeModal}
                   onCloseTradeModal={handleCloseTradeModal}
                   onProposeTrade={handleProposeTrade}
-                  onInquireGoods={handleInquireGoods}
                   playerItems={playerItems}
                   npcItems={npcItems}
                 />
@@ -375,15 +371,25 @@ export default function App() {
                 <SalInventoryPage
                   knownItems={npcItems}
                   mysteryCount={mysteryCount}
+                  onInquire={handleInquireGoods}
+                  inquireDisabled={mode !== 'llm' || thinking}
                   onClose={() => setOpenPanel('none')}
                 />
               </div>
               <div className="panel-seam panel-seam-left" />
               <div className="panel-seam panel-seam-right" />
             </div>
-            {openPanel === 'none' && !endOutcome && (
+            {openPanel === 'none' && !endOutcome && !tradeModalOpen && (
               <>
                 <InventoryButton onClick={() => setOpenPanel('player')} />
+                {mode === 'llm' && (
+                  <InventoryButton
+                    onClick={handleOpenTradeModal}
+                    icon={SWAP_ICON}
+                    className="swap-inventory-button"
+                    label="Propose a trade"
+                  />
+                )}
                 <InventoryButton
                   onClick={() => setOpenPanel('sal')}
                   icon={STRONGBOX_ICON}

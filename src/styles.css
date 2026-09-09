@@ -1011,6 +1011,11 @@ html, body {
   right: 14px;
 }
 
+.inventory-button.swap-inventory-button {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .inventory-button-icon {
   width: 30px;
   height: 30px;
@@ -1070,6 +1075,86 @@ html, body {
   gap: 12px;
 }
 
+.inquiry-wrap {
+  position: relative;
+  margin-left: auto;
+}
+
+.inquiry-button {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  background: var(--wood-mid);
+  cursor: pointer;
+  padding: 0;
+}
+
+.inquiry-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.inquiry-button-icon {
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.inquiry-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  width: 158px;
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(90deg, var(--paper-shadow) 0px, var(--paper-shadow) 1px, transparent 1px, transparent 3px);
+  background-blend-mode: soft-light;
+  border: 2px solid var(--frame-brown);
+  border-radius: 4px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inquiry-menu-title {
+  font-size: 9px;
+  letter-spacing: 0.4px;
+  color: var(--ink);
+  opacity: 0.7;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.inquiry-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 10px;
+  text-align: left;
+  padding: 6px 7px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid var(--frame-brown-dim);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.inquiry-menu-item .suit-icon {
+  width: 14px;
+  height: 14px;
+}
+
 .back-bar {
   position: relative;
   overflow: hidden;
@@ -1090,47 +1175,48 @@ html, body {
 .back-bar-chevrons {
   position: absolute;
   inset: 0;
-  background-repeat: repeat-x;
-  background-position: center;
-  background-size: 16px 16px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  opacity: 0.75;
+  opacity: 0.85;
 }
 
 /* Small blocky 3-step chevrons (axis-aligned rects, no anti-aliased
    diagonal strokes) so they read as pixel art rather than smooth vector
-   arrows. */
-.back-bar-right .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='5' y='4' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='8' y='7' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='5' y='10' width='3' height='3' fill='%23f5e6c8'/%3E%3C/svg%3E");
-  animation: chevronScrollRight 1400ms steps(4) infinite;
-}
-
-.back-bar-left .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='8' y='4' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='5' y='7' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='8' y='10' width='3' height='3' fill='%23f5e6c8'/%3E%3C/svg%3E");
-  animation: chevronScrollLeft 1400ms steps(4) infinite;
-}
-
-@keyframes chevronScrollRight {
-  from { background-position-x: 0; }
-  to { background-position-x: 16px; }
-}
-
-@keyframes chevronScrollLeft {
-  from { background-position-x: 0; }
-  to { background-position-x: -16px; }
-}
-
-/* Shine sweep across the whole bar, same motion as .shiny-text, dimmed
-   down so it's a subtle glint rather than a bright flash. */
-.back-bar::after {
+   arrows. The arrows never move — instead two interleaved layers (every
+   other arrow each) blink opposite each other, like a neon sign where
+   alternating tubes are lit. Each SVG tile is 32px wide but only draws
+   an arrow in its left 16px half, so tiled at 32px it lands one arrow
+   per "slot" with a gap between — the second layer is shifted by 16px
+   to fill exactly those gaps. */
+.back-bar-chevrons::before,
+.back-bar-chevrons::after {
   content: '';
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.2) 50%, transparent 65%);
-  background-size: 250% 100%;
-  animation: shineSweep 3.4s linear infinite;
+  background-repeat: repeat-x;
+  background-position: center;
+  background-size: 32px 16px;
+  animation: neonBlink 1.6s ease-in-out infinite;
+}
+
+.back-bar-chevrons::after {
+  background-position: calc(50% + 16px) center;
+  animation-delay: -0.8s;
+}
+
+.back-bar-right .back-bar-chevrons::before,
+.back-bar-right .back-bar-chevrons::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' shape-rendering='crispEdges'%3E%3Crect x='5' y='4' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='8' y='7' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='5' y='10' width='3' height='3' fill='%23f5e6c8'/%3E%3C/svg%3E");
+}
+
+.back-bar-left .back-bar-chevrons::before,
+.back-bar-left .back-bar-chevrons::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' shape-rendering='crispEdges'%3E%3Crect x='8' y='4' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='5' y='7' width='3' height='3' fill='%23f5e6c8'/%3E%3Crect x='8' y='10' width='3' height='3' fill='%23f5e6c8'/%3E%3C/svg%3E");
+}
+
+@keyframes neonBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
 }
 
 .back-bar.pressed {
@@ -1141,16 +1227,23 @@ html, body {
 }
 
 .back-bar.pressed .back-bar-chevrons {
+  opacity: 0.7;
+}
+
+.back-bar.pressed .back-bar-chevrons::before,
+.back-bar.pressed .back-bar-chevrons::after {
   animation-play-state: paused;
-  opacity: 0.65;
+  opacity: 1;
 }
 
-.back-bar.pressed.back-bar-right .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='5' y='4' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='8' y='7' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='5' y='10' width='3' height='3' fill='%232b1c10'/%3E%3C/svg%3E");
+.back-bar.pressed.back-bar-right .back-bar-chevrons::before,
+.back-bar.pressed.back-bar-right .back-bar-chevrons::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' shape-rendering='crispEdges'%3E%3Crect x='5' y='4' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='8' y='7' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='5' y='10' width='3' height='3' fill='%232b1c10'/%3E%3C/svg%3E");
 }
 
-.back-bar.pressed.back-bar-left .back-bar-chevrons {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' shape-rendering='crispEdges'%3E%3Crect x='8' y='4' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='5' y='7' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='8' y='10' width='3' height='3' fill='%232b1c10'/%3E%3C/svg%3E");
+.back-bar.pressed.back-bar-left .back-bar-chevrons::before,
+.back-bar.pressed.back-bar-left .back-bar-chevrons::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='16' shape-rendering='crispEdges'%3E%3Crect x='8' y='4' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='5' y='7' width='3' height='3' fill='%232b1c10'/%3E%3Crect x='8' y='10' width='3' height='3' fill='%232b1c10'/%3E%3C/svg%3E");
 }
 
 .inventory-title {
@@ -1216,50 +1309,6 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* ---------- Action toolbar (footer buttons) ---------- */
-
-.footer-actions {
-  display: flex;
-  gap: 8px;
-  padding: 0 10px;
-  width: 100%;
-}
-
-.footer-action-btn {
-  flex: 1;
-  font-family: inherit;
-  font-size: 10px;
-  letter-spacing: 0.3px;
-  padding: 6px 4px;
-  color: var(--parchment);
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.6);
-  background-color: var(--wood-mid);
-  background-image:
-    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0px, rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 5px),
-    linear-gradient(180deg, var(--wood-mid), var(--wood-dark) 85%);
-  border: 2px solid var(--frame-brown);
-  border-radius: 4px;
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-}
-
-.footer-action-btn:active,
-.footer-action-btn.pressed {
-  background-color: var(--parchment);
-  background-image:
-    repeating-linear-gradient(180deg, rgba(120, 95, 55, 0.12) 0px, rgba(120, 95, 55, 0.12) 1px, transparent 1px, transparent 5px),
-    linear-gradient(180deg, var(--parchment), var(--paper) 85%);
-  color: var(--ink);
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35);
-  transform: translateY(1px);
-}
-
-.footer-action-btn:disabled {
-  opacity: 0.35;
-  cursor: default;
-  pointer-events: none;
 }
 
 /* ---------- Trade Proposal Modal ---------- */

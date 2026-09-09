@@ -28,7 +28,7 @@
       "player_options": [
         { "label": "Show watch", "strategy": "friendly", "text": "This pocket watch. Family heirloom, runs like new." },
         { "label": "Lowball", "strategy": "shrewd", "text": "Depends what you're willing to give up first." },
-        { "label": "Demand", "strategy": "aggressive", "text": "The deed. That's what I'm here for." },
+        { "label": "Demand", "strategy": "aggressive", "text": "That six-shooter. That's what I'm here for." },
         { "label": "Bluff", "strategy": "deceptive", "text": "Let's just say it's worth more than it looks." }
       ]
     },
@@ -43,7 +43,7 @@
       "trade_state": "none",
       "player_options": [
         { "label": "Reassure", "strategy": "friendly", "text": "It's worth more than it looks, I promise you that." },
-        { "label": "Sweeten", "strategy": "shrewd", "text": "I'll throw in something extra if the deed's on the table." },
+        { "label": "Sweeten", "strategy": "shrewd", "text": "I'll throw in something extra if that six-shooter's on the table." },
         { "label": "Push", "strategy": "aggressive", "text": "Take it or leave it, Sal. My patience runs thin too." },
         { "label": "Stall", "strategy": "deceptive", "text": "There's more where that came from, trust me." }
       ]

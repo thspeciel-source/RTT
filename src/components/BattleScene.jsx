@@ -24,13 +24,9 @@ export default function BattleScene({
   endOutcome,
   endSummary,
   onRestart,
-  showActions,
-  actionsDisabled,
   tradeModalOpen,
-  onOpenTradeModal,
   onCloseTradeModal,
   onProposeTrade,
-  onInquireGoods,
   playerItems,
   npcItems
 }) {
@@ -70,28 +66,7 @@ export default function BattleScene({
             </div>
           </div>
         )}
-        <div className="footer-banner">
-          {showActions && (
-            <div className="footer-actions">
-              <button
-                type="button"
-                className="footer-action-btn"
-                disabled={actionsDisabled}
-                onClick={onOpenTradeModal}
-              >
-                Propose Trade
-              </button>
-              <button
-                type="button"
-                className="footer-action-btn"
-                disabled={actionsDisabled}
-                onClick={onInquireGoods}
-              >
-                Ask About His Goods
-              </button>
-            </div>
-          )}
-        </div>
+        <div className="footer-banner" />
       </div>
       {tradeModalOpen && (
         <TradeProposalModal
