@@ -17,6 +17,8 @@ import bubbleSkull from '../assets/bubbles/bubble_skull.png';
 import bubbleZzz from '../assets/bubbles/bubble_zzz.png';
 import bubbleSparkle from '../assets/bubbles/bubble_sparkle.png';
 import bubbleEllipsis from '../assets/bubbles/bubble_ellipsis.png';
+import bubbleMoneyEyes from '../assets/bubbles/bubble_money_eyes.png';
+import bubbleLightbulb from '../assets/bubbles/bubble_lightbulb.png';
 import suitSpade from '../assets/ui/suit_spade.png';
 import suitDiamond from '../assets/ui/suit_diamond.png';
 import suitClub from '../assets/ui/suit_club.png';
@@ -33,10 +35,12 @@ import sunburstIcon from '../assets/ui/sunburst.png';
 // overlays only cover the head region (everything below the neck is
 // transparent) and are cropped from the exact same coordinate space as
 // the body, so they land in perfect alignment with no per-layer scaling.
-// A face key not listed here (most of the ~50-key emote bank still is)
-// falls back to just showing the body's own neutral face — see
-// NPCSprite.jsx. Arms aren't separate layers yet; they're baked into
-// NPC_BODY until arm-pose art exists.
+// Only 5 expressions exist as real art (scowl, rage, shock, sad, grin) —
+// the other 11 keys in the LLM's face bank reuse whichever of those 5
+// reads closest, via the mapping below, rather than all silently
+// collapsing to the same neutral look. Arms aren't separate layers (no
+// arm-pose art exists), so distinct poses are approximated with CSS
+// transforms on the whole sprite instead — see NPCSprite.jsx.
 export const NPC_BODY = bodyDustySal;
 // Ground shadow extracted out of the original generation (same pixels, same
 // coordinate space as NPC_BODY) so it renders as its own layer underneath
@@ -45,12 +49,21 @@ export const NPC_BODY = bodyDustySal;
 export const NPC_SHADOW = shadowDustySal;
 export const PLAYER_BODY = playerBase;
 
+// neutral, blank, smirk, sly, and nervous are left out on purpose — they
+// read fine as the body's own baked-in neutral face rather than being
+// forced onto a mismatched expression.
 export const FACE_IMAGES = {
   scowl: faceScowl,
   rage: faceRage,
   shock: faceShock,
   sad: faceSad,
-  grin: faceGrin
+  grin: faceGrin,
+  smile: faceGrin,
+  laugh: faceGrin,
+  frown: faceSad,
+  worry: faceSad,
+  pleading: faceSad,
+  disgust: faceScowl
 };
 
 export const BUBBLE_IMAGES = {
@@ -64,7 +77,9 @@ export const BUBBLE_IMAGES = {
   skull: bubbleSkull,
   zzz: bubbleZzz,
   sparkle: bubbleSparkle,
-  ellipsis: bubbleEllipsis
+  ellipsis: bubbleEllipsis,
+  money_eyes: bubbleMoneyEyes,
+  lightbulb: bubbleLightbulb
 };
 
 export const SUIT_IMAGES = {

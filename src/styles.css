@@ -456,7 +456,31 @@ html, body {
   bottom: 20%;
   width: 140px;
   height: 277px;
+  transition: transform 200ms ease-out;
 }
+
+/* No separate arm-pose art exists yet — every pose swaps the exact same
+   baked-in body art. Until real arm layers exist, each pose gets its own
+   subtle static tilt/shift/scale on the whole sprite so the arms field
+   the LLM picks always reads as a genuinely different held stance
+   instead of being silently ignored. Kept deliberately understated so it
+   doesn't fight the (separate) body_anim keyframe animations layered on
+   the child .npc-sprite element. */
+.arms-relaxed { transform: none; }
+.arms-crossed_arms { transform: scaleX(0.97); }
+.arms-hand_on_hip { transform: rotate(-2deg); }
+.arms-palms_up { transform: translateY(-3px) scale(1.02); }
+.arms-pointing { transform: translateX(4px) rotate(-2deg); }
+.arms-fist_raised { transform: translateY(-4px); }
+.arms-fist_slam { transform: translateY(3px) scaleY(0.97); }
+.arms-hand_wave { transform: rotate(3deg); }
+.arms-hand_out { transform: translateX(-4px) skewX(-2deg); }
+.arms-scratching_head { transform: rotate(-3deg) translateY(-1px); }
+.arms-rubbing_chin { transform: skewX(2deg); }
+.arms-hands_up { transform: translateY(-5px) scaleY(1.03); }
+.arms-tipping_hat { transform: rotate(2deg) translateY(-2px); }
+.arms-reaching_pocket { transform: skewX(-3deg) translateX(3px); }
+.arms-counting_money { transform: scale(1.03); }
 
 .npc-sprite {
   position: relative;

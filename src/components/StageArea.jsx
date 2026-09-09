@@ -43,7 +43,7 @@ export default function StageArea({ mood, patience, npc, crashed }) {
         <img className="npc-layer-img npc-shadow-img" src={NPC_SHADOW} alt="" />
       </div>
       <PlayerSprite />
-      <NPCSprite face={npc.face} bubble={npc.bubble} bodyAnim={npc.body_anim} />
+      <NPCSprite face={npc.face} arms={npc.arms} bubble={npc.bubble} bodyAnim={npc.body_anim} />
     </div>
   );
 }

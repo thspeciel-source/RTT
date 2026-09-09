@@ -2,13 +2,13 @@ import React from 'react';
 import emoteMap from '../data/emote-map.json';
 import { NPC_BODY, FACE_IMAGES, BUBBLE_IMAGES } from '../systems/sprite-assets.js';
 
-export default function NPCSprite({ face, bubble, bodyAnim }) {
+export default function NPCSprite({ face, arms, bubble, bodyAnim }) {
   const bubbleStyle = emoteMap.bubble[bubble];
   const faceImage = FACE_IMAGES[face];
   const bubbleImage = bubble && BUBBLE_IMAGES[bubble];
 
   return (
-    <div className="npc-sprite-wrap">
+    <div className={`npc-sprite-wrap arms-${arms || 'relaxed'}`}>
       <div className={`npc-sprite anim-${bodyAnim || 'idle'}`}>
         <img className="npc-layer-img" src={NPC_BODY} alt="" />
 
